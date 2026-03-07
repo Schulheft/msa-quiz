@@ -44,6 +44,31 @@ body{font-family:"DM Sans",sans-serif;background:var(--paper);color:var(--ink);m
 .exam-btn-sub{font-size:.75rem;opacity:.45;}
 .exam-btn-stats{font-size:.7rem;font-weight:700;margin-top:6px;}
 
+/* ─── ÜBUNGSKALENDER ───────────────────────────────────────────── */
+.cal-wrap{margin-top:28px;}
+.cal-label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;opacity:.4;margin-bottom:10px;}
+.cal-card{background:var(--cream);border:1.5px solid var(--border);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.cal-month{font-family:"Playfair Display",serif;font-size:1rem;font-weight:900;}
+.cal-streak{font-size:.75rem;font-weight:700;color:var(--green);display:flex;align-items:center;gap:5px;}
+.cal-streak-flame{font-size:1rem;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-dow{text-align:center;font-size:.62rem;font-weight:700;opacity:.35;padding-bottom:4px;text-transform:uppercase;letter-spacing:.05em;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;position:relative;font-size:.78rem;font-weight:500;color:var(--ink);opacity:.55;transition:all .15s;}
+.cal-day.in-month{opacity:1;}
+.cal-day.today{background:var(--soft);border:2px solid var(--border);font-weight:700;opacity:1;}
+.cal-day.practiced{opacity:1;}
+.cal-day .cal-dot{
+  position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 5px rgba(45,158,106,.5);
+}
+.cal-day.practiced.today{background:rgba(45,158,106,.12);border-color:var(--green);}
+.cal-day.future{opacity:.25;}
+@keyframes dotPop{0%{transform:translateX(-50%) scale(0)}70%{transform:translateX(-50%) scale(1.3)}100%{transform:translateX(-50%) scale(1)}}
+.cal-dot.pop{animation:dotPop .35s cubic-bezier(.34,1.56,.64,1) forwards;}
+
 /* ─── BEREICH (MSA/BBR) ────────────────────────────────────────── */
 .area-inner{max-width:960px;margin:0 auto;padding:24px 20px 60px;width:100%;}
 .area-hero{margin-bottom:24px;}
@@ -300,6 +325,33 @@ body{font-family:"DM Sans",sans-serif;background:var(--paper);color:var(--ink);m
 .res-progress-bar{flex:1;height:6px;background:rgba(26,26,46,.1);border-radius:100px;overflow:hidden;}
 .res-progress-fill{height:100%;background:var(--blue);border-radius:100px;}
 .hidden{display:none!important;}
+
+/* ─── UPDATE-BUTTON ─────────────────────────────────────────────── */
+.update-btn{
+  margin-left:auto;display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);
+  color:#fff;border-radius:100px;padding:5px 13px;font-size:.76rem;font-weight:600;
+  cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .2s;white-space:nowrap;
+}
+.update-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.35);}
+.update-btn.loading{opacity:.6;cursor:default;pointer-events:none;}
+.update-btn.success{background:rgba(45,158,106,.25);border-color:#2d9e6a;color:#4ade80;}
+.update-btn.error{background:rgba(217,79,79,.2);border-color:#d94f4f;color:#fca5a5;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.update-spin{display:inline-block;animation:spin .7s linear infinite;}
+
+/* ─── UPDATE-TOAST ──────────────────────────────────────────────── */
+.update-toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--ink);color:#fff;border-radius:100px;padding:10px 22px;
+  font-size:.84rem;font-weight:600;z-index:999;opacity:0;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;
+  display:flex;align-items:center;gap:8px;white-space:nowrap;
+  box-shadow:0 8px 32px rgba(0,0,0,.25);
+}
+.update-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.update-toast.ok{background:#166534;}
+.update-toast.err{background:#991b1b;}
 </style>
 </head>
 <body>
@@ -308,6 +360,10 @@ body{font-family:"DM Sans",sans-serif;background:var(--paper);color:var(--ink);m
 <div id="pg-start" class="page active">
   <div class="hdr">
     <span class="hdr-m">Deutsch</span><span class="hdr-sub">Quiz</span>
+    <button class="update-btn" id="update-btn" onclick="doUpdate()" title="Neue Inhalte laden">
+      <span id="update-btn-icon">↻</span>
+      <span id="update-btn-label">Aktualisieren</span>
+    </button>
   </div>
   <div class="home-inner fu">
     <div class="hero">
@@ -337,6 +393,23 @@ body{font-family:"DM Sans",sans-serif;background:var(--paper);color:var(--ink);m
         </div>
       </div>
     </div>
+
+    <!-- ═══ ÜBUNGSKALENDER ═══════════════════════════════════════ -->
+    <div class="cal-wrap">
+      <p class="cal-label">Übungskalender</p>
+      <div class="cal-card card">
+        <div class="cal-head">
+          <span class="cal-month" id="cal-month-label"></span>
+          <span class="cal-streak" id="cal-streak" style="display:none">
+            <span class="cal-streak-flame">🔥</span>
+            <span id="cal-streak-text"></span>
+          </span>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+    </div>
+    <!-- ════════════════════════════════════════════════════════════ -->
+
   </div>
 </div>
 
@@ -632,15 +705,115 @@ function saveSc(id,ok,tot) {
   };
   // letzten Trainingszeitpunkt speichern
   s._lastPracticed=Date.now();
+  // Übungstag eintragen
+  markPracticedToday(s);
   saveAll(s);
 }
-function scCol(p) {
-  if(p===undefined||p===null) return"#d1d5db";
-  if(p<60) return"#ef4444";
-  if(p<80) return"#f97316";
-  if(p<90) return"#eab308";
-  if(p<95) return"#4ade80";
-  return"#16a34a";
+
+// ================================ KALENDER-LOGIK ================================
+
+/** Gibt den Datums-String YYYY-MM-DD für einen Timestamp zurück */
+function dayKey(ts) {
+  var d = new Date(ts);
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+
+/** Trägt den heutigen Tag als Übungstag in den Speicher ein */
+function markPracticedToday(storageObj) {
+  var key = dayKey(Date.now());
+  var days = storageObj._practicedDays || {};
+  days[key] = true;
+  storageObj._practicedDays = days;
+}
+
+/** Gibt Set der geübten Tage zurück */
+function getPracticedDays() {
+  var s = sc();
+  return s._practicedDays || {};
+}
+
+/** Berechnet aktuelle Streak (aufeinanderfolgende Tage bis heute) */
+function calcStreak(practicedDays) {
+  var streak = 0;
+  var d = new Date();
+  while(true) {
+    var key = dayKey(d.getTime());
+    if(practicedDays[key]) {
+      streak++;
+      d.setDate(d.getDate()-1);
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+/** Rendert den Kalender auf der Startseite */
+function renderCalendar() {
+  var practicedDays = getPracticedDays();
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth(); // 0-based
+
+  // Monatsname auf Deutsch
+  var monthNames = ['Januar','Februar','März','April','Mai','Juni',
+                    'Juli','August','September','Oktober','November','Dezember'];
+  document.getElementById('cal-month-label').textContent = monthNames[month]+' '+year;
+
+  // Streak
+  var streak = calcStreak(practicedDays);
+  var streakEl = document.getElementById('cal-streak');
+  if(streak >= 2) {
+    streakEl.style.display = 'flex';
+    document.getElementById('cal-streak-text').textContent = streak+' Tage in Folge';
+  } else {
+    streakEl.style.display = 'none';
+  }
+
+  var grid = document.getElementById('cal-grid');
+  var html = '';
+
+  // Wochentag-Header (Mo–So)
+  var dows = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+  dows.forEach(function(d){ html += '<div class="cal-dow">'+d+'</div>'; });
+
+  // Erster Tag des Monats & Wochentag (Mo=0 ... So=6)
+  var firstDay = new Date(year, month, 1);
+  var startDow = (firstDay.getDay()+6) % 7; // 0=Mo
+
+  // Letzter Tag
+  var daysInMonth = new Date(year, month+1, 0).getDate();
+  var todayStr = dayKey(now.getTime());
+
+  // Leere Zellen vor dem 1.
+  for(var i=0; i<startDow; i++) {
+    html += '<div class="cal-day"></div>';
+  }
+
+  // Tage
+  for(var d=1; d<=daysInMonth; d++) {
+    var dateObj = new Date(year, month, d);
+    var key = dayKey(dateObj.getTime());
+    var isToday = (key === todayStr);
+    var isFuture = (dateObj > now && key !== todayStr);
+    var practiced = !!practicedDays[key];
+
+    var cls = 'cal-day in-month';
+    if(isToday) cls += ' today';
+    if(isFuture) cls += ' future';
+    if(practiced) cls += ' practiced';
+
+    html += '<div class="'+cls+'">' + d;
+    if(practiced) {
+      html += '<span class="cal-dot'+(isToday?' pop':'')+'"></span>';
+    }
+    html += '</div>';
+  }
+
+  grid.innerHTML = html;
 }
 
 // ================================ GLOBALE VARIABLEN ================================
@@ -651,7 +824,6 @@ var pendingThemeId = null;
 
 // ================================ HILFE FÜR REGELN (MSA / BBR) =====================
 function getGramSections() {
-  // Je nach aktuellem Bereich die richtigen Regeln zurückgeben
   return (currentArea === 'msa') ? GRAM_SECTIONS : GRAM_SECTIONS_BBR;
 }
 
@@ -668,7 +840,6 @@ function goStart() {
 function openArea(area) {
   currentArea = area;
   renderArea(area);
-  // Standardmäßig den Aufgaben-Tab anzeigen
   switchAreaTab(area, 'aufgaben');
   showPage(area);
 }
@@ -692,9 +863,9 @@ function renderStart() {
   } else {
     lpEl.style.display = "none";
   }
-  // Stats auf den Kacheln entfernen (leer lassen)
   document.getElementById("msa-home-stats").textContent = '';
   document.getElementById("bbr-home-stats").textContent = '';
+  renderCalendar();
 }
 
 // ================================ BEREICH (MSA/BBR) ================================
@@ -735,8 +906,6 @@ function renderArea(area) {
 }
 
 function renderExtraPanel(area) {
-  // Für MSA: Zuerst nach MSA_EXTRA_THEMES suchen, falls nicht, EXTRA_THEMES verwenden (für Kompatibilität)
-  // Für BBR: BBR_EXTRA_THEMES verwenden (falls nicht vorhanden, leer)
   var extraThemes;
   if (area === 'msa') {
     extraThemes = (typeof MSA_EXTRA_THEMES !== 'undefined') ? MSA_EXTRA_THEMES : 
@@ -786,8 +955,7 @@ function openGramPage(sectionId, fromArea) {
 }
 
 function renderGramPage(activeSectionId) {
-  var sections = getGramSections();  // abhängig von currentArea (wurde in openGramPage gesetzt)
-  // Navigation
+  var sections = getGramSections();
   var navHtml = '';
   sections.forEach(function(s) {
     navHtml += '<button class="gram-nav-btn'+(s.id===activeSectionId?' active':'')+'" onclick="renderGramPage(\''+s.id+'\'); updateGramNav(\''+s.id+'\')">'+s.label+'</button>';
@@ -809,7 +977,6 @@ function renderGramPage(activeSectionId) {
   });
   html += '</div>';
   document.getElementById('gram-content').innerHTML = html;
-  // kleine Einblend-Animation
   document.querySelectorAll('#gram-content .gram-card').forEach(function(c,i) {
     c.style.opacity = 0;
     setTimeout(function(){
@@ -855,9 +1022,17 @@ function gramSearch(val) {
 }
 
 // ================================ STATISTIK ================================
+function scCol(p) {
+  if(p===undefined||p===null) return"#d1d5db";
+  if(p<60) return"#ef4444";
+  if(p<80) return"#f97316";
+  if(p<90) return"#eab308";
+  if(p<95) return"#4ade80";
+  return"#16a34a";
+}
+
 function openStatPage(themeId, area) {
   currentArea = area || currentArea;
-  // Themen können sowohl in regulären als auch in extra Arrays sein
   var allThemes = (currentArea==='msa') 
     ? MSA_THEMES.concat((MSA_EXTRA_THEMES || EXTRA_THEMES || [])) 
     : BBR_THEMES.concat(BBR_EXTRA_THEMES || []);
@@ -907,7 +1082,6 @@ function renderStatChart(theme, st) {
   ];
   var html = '';
   bars.forEach(function(b){
-    var pct = b.max>0 ? Math.round(b.val/b.max*100) : 0;
     var h = b.max>0 ? Math.round(b.val/b.max*120) : 0;
     html += '<div class="bar-group">' +
             '<div class="bar-val">'+b.val+'</div>' +
@@ -942,7 +1116,6 @@ function startFromStat() {
 
 // ================================ QUIZ-START ================================
 function startTheme(id) {
-  // Themen aus regulären und extra Arrays zusammen
   var allThemes = (currentArea==='msa') 
     ? MSA_THEMES.concat((MSA_EXTRA_THEMES || EXTRA_THEMES || [])) 
     : BBR_THEMES.concat(BBR_EXTRA_THEMES || []);
@@ -1334,7 +1507,6 @@ function closeSheet() {
   document.getElementById("overlay").classList.remove("open");
   document.getElementById("sheet").classList.remove("open");
 }
-// Touch zum Schließen
 var shY = 0;
 document.getElementById("sheet").addEventListener("touchstart", function(e){ shY = e.touches[0].clientY; }, {passive:true});
 document.getElementById("sheet").addEventListener("touchend", function(e){
@@ -1375,6 +1547,9 @@ document.addEventListener("keydown", function(e){
 });
 </script>
 
+<!-- ─── UPDATE-TOAST ──────────────────────────────────────────────── -->
+<div class="update-toast" id="update-toast"></div>
+
 <!-- ═══ DATEN (ausgelagert) ═══════════════════════════════════════ -->
 <script src="regeln.js"></script>
 <script src="regeln-bbr.js"></script>
@@ -1388,6 +1563,115 @@ document.addEventListener("keydown", function(e){
 window.addEventListener('load', function(){
   renderStart();
 });
+
+// ================================ UPDATE-LOGIK ================================
+// Die JS-Dateien die aktualisiert werden sollen
+var UPDATE_SCRIPTS = [
+  'regeln.js',
+  'regeln-bbr.js',
+  'msa-aufgaben.js',
+  'bbr-aufgaben.js',
+  'msa-extra-aufgaben.js',
+  'bbr-extra-aufgaben.js'
+];
+
+function showToast(msg, type, duration) {
+  var t = document.getElementById('update-toast');
+  t.textContent = msg;
+  t.className = 'update-toast ' + (type||'');
+  // kleine Emoji vorne
+  if(type==='ok') t.innerHTML = '✓ ' + msg;
+  if(type==='err') t.innerHTML = '⚠ ' + msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.classList.remove('show'); }, duration||3000);
+}
+
+function setUpdateBtn(state) {
+  var btn = document.getElementById('update-btn');
+  var icon = document.getElementById('update-btn-icon');
+  var label = document.getElementById('update-btn-label');
+  btn.className = 'update-btn';
+  if(state === 'loading') {
+    btn.classList.add('loading');
+    icon.innerHTML = '<span class="update-spin">↻</span>';
+    label.textContent = 'Lädt …';
+  } else if(state === 'success') {
+    btn.classList.add('success');
+    icon.textContent = '✓';
+    label.textContent = 'Aktuell!';
+    setTimeout(function(){ setUpdateBtn('idle'); }, 3000);
+  } else if(state === 'error') {
+    btn.classList.add('error');
+    icon.textContent = '⚠';
+    label.textContent = 'Fehler';
+    setTimeout(function(){ setUpdateBtn('idle'); }, 3000);
+  } else {
+    icon.textContent = '↻';
+    label.textContent = 'Aktualisieren';
+  }
+}
+
+function doUpdate() {
+  setUpdateBtn('loading');
+  showToast('Neue Inhalte werden geladen …', '', 30000);
+
+  var ts = Date.now();
+  var scripts = UPDATE_SCRIPTS.slice();
+  var loaded = 0;
+  var failed = [];
+  var changed = 0;
+
+  // Für jede Datei: Fetch mit Cache-Bypass, dann neu einbinden
+  function loadNext() {
+    if(scripts.length === 0) {
+      // Alle durch – Seite neu laden damit neue Skripte aktiv werden
+      if(failed.length > 0) {
+        setUpdateBtn('error');
+        showToast('Einige Dateien konnten nicht geladen werden.', 'err', 4000);
+      } else {
+        setUpdateBtn('success');
+        showToast('Inhalte aktualisiert – Seite wird neu geladen …', 'ok', 2500);
+        // Kurze Pause, dann reload mit Cache-Bypass
+        setTimeout(function(){
+          // Cache-buster für index.html selbst
+          var url = window.location.href.split('?')[0];
+          window.location.href = url + '?v=' + ts;
+        }, 1800);
+      }
+      return;
+    }
+
+    var src = scripts.shift();
+    var url = src + '?v=' + ts;
+
+    // HEAD-Request um zu prüfen ob Datei existiert, dann Script-Tag ersetzen
+    fetch(url, { cache: 'no-store' })
+      .then(function(r) {
+        if(!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(function(newCode) {
+        // Altes script-tag entfernen und neues einfügen
+        var existing = document.querySelector('script[src^="' + src + '"]');
+        if(existing) existing.remove();
+        var s = document.createElement('script');
+        s.src = url;
+        document.head.appendChild(s);
+        changed++;
+        loaded++;
+        loadNext();
+      })
+      .catch(function(e) {
+        console.warn('Update fehlgeschlagen für ' + src + ':', e);
+        failed.push(src);
+        loaded++;
+        loadNext();
+      });
+  }
+
+  loadNext();
+}
 </script>
 </body>
 </html>

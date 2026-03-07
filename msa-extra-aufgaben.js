@@ -3,7 +3,7 @@
 // Thema ergänzen: Objekt {id,title,emoji,color,qs:[...]} ans Ende.
 // ================================================================
 
-var EXTRA_THEMES = [
+var MSA_EXTRA_THEMES = [
 
 // ── KOMMASETZUNG ──
 {id:"extra_komma",title:"Kommasetzung",emoji:"🔍",color:"#0f766e",qs:[
