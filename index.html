@@ -1036,7 +1036,7 @@ function openStatPage(themeId, area) {
   currentArea = area || currentArea;
   var allThemes = (currentArea==='msa') 
     ? MSA_THEMES.concat((MSA_EXTRA_THEMES || EXTRA_THEMES || [])) 
-    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []);
+    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []).concat(BBR_RECHTSCHREIBUNG_THEMES || []).concat(BBR_WIEDER_THEMES || []);
   var theme = allThemes.filter(function(t){ return t.id===themeId; })[0];
   if(!theme) return;
   pendingThemeId = themeId;
@@ -1119,7 +1119,7 @@ function startFromStat() {
 function startTheme(id) {
   var allThemes = (currentArea==='msa') 
     ? MSA_THEMES.concat((MSA_EXTRA_THEMES || EXTRA_THEMES || [])) 
-    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []);
+    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []).concat(BBR_RECHTSCHREIBUNG_THEMES || []).concat(BBR_WIEDER_THEMES || []);
   var theme = allThemes.filter(function(t){ return t.id===id; })[0];
   if(!theme) return;
   S.themeId = id;
@@ -1429,7 +1429,7 @@ function continueQuiz() {
   S.savedQs = null;
   var allThemes = (currentArea==='msa') 
     ? MSA_THEMES.concat((MSA_EXTRA_THEMES || EXTRA_THEMES || [])) 
-    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []);
+    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []).concat(BBR_RECHTSCHREIBUNG_THEMES || []).concat(BBR_WIEDER_THEMES || []);
   var theme = allThemes.filter(function(t){ return t.id===S.themeId; })[0];
   if(theme) document.getElementById("hdr-theme").textContent = theme.title;
   renderQ();
@@ -1442,7 +1442,7 @@ function showResult(aborted) {
   var pct = Math.round(okCount/tot*100);
   var allThemes = (currentArea==='msa') 
     ? MSA_THEMES.concat((MSA_EXTRA_THEMES || EXTRA_THEMES || [])) 
-    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []);
+    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []).concat(BBR_RECHTSCHREIBUNG_THEMES || []).concat(BBR_WIEDER_THEMES || []);
   var theme = allThemes.filter(function(t){ return t.id===S.themeId; })[0];
   var totalQs = theme ? theme.qs.length : tot;
   var isIncomplete = aborted && tot<totalQs;
@@ -1558,6 +1558,9 @@ document.addEventListener("keydown", function(e){
 <script src="bbr-aufgaben.js"></script>
 <script src="msa-extra-aufgaben.js"></script>
 <script src="bbr-extra-aufgaben.js"></script>
+<!-- BBR-Sondermodule: separat bearbeitbare Themen -->
+<script src="bbr-rechtschreibung.js"></script>
+<script src="bbr-extra-wieder.js"></script>
 
 <!-- ═══ INITIALISIERUNG ════════════════════════════════════════════ -->
 <script>
@@ -1573,7 +1576,9 @@ var UPDATE_SCRIPTS = [
   'msa-aufgaben.js',
   'bbr-aufgaben.js',
   'msa-extra-aufgaben.js',
-  'bbr-extra-aufgaben.js'
+  'bbr-extra-aufgaben.js',
+  'bbr-rechtschreibung.js',
+  'bbr-extra-wieder.js'
 ];
 
 function showToast(msg, type, duration) {
