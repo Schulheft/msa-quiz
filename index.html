@@ -1522,9 +1522,17 @@ function continueQuiz() {
   S.answers = [];
   S.answered = false;
   S.savedQs = null;
-  var allThemes = (currentArea==='msa') 
-    ? MSA_THEMES.concat((MSA_EXTRA_THEMES || EXTRA_THEMES || [])).concat(MSA_10PKT_THEMES || []) 
-    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []).concat(BBR_RECHTSCHREIBUNG_THEMES || []).concat(BBR_WIEDER_THEMES || []);
+  var _msaBase  = typeof MSA_THEMES              !== 'undefined' ? MSA_THEMES              : [];
+  var _msaExtra = typeof MSA_EXTRA_THEMES        !== 'undefined' ? MSA_EXTRA_THEMES        :
+                  typeof EXTRA_THEMES            !== 'undefined' ? EXTRA_THEMES            : [];
+  var _msa10pkt = typeof MSA_10PKT_THEMES        !== 'undefined' ? MSA_10PKT_THEMES        : [];
+  var _bbrBase  = typeof BBR_THEMES              !== 'undefined' ? BBR_THEMES              : [];
+  var _bbrExtra = typeof BBR_EXTRA_THEMES        !== 'undefined' ? BBR_EXTRA_THEMES        : [];
+  var _bbrRecht = typeof BBR_RECHTSCHREIBUNG_THEMES !== 'undefined' ? BBR_RECHTSCHREIBUNG_THEMES : [];
+  var _bbrWieder= typeof BBR_WIEDER_THEMES       !== 'undefined' ? BBR_WIEDER_THEMES       : [];
+  var allThemes = (currentArea==='msa')
+    ? _msaBase.concat(_msaExtra).concat(_msa10pkt)
+    : _bbrBase.concat(_bbrExtra).concat(_bbrRecht).concat(_bbrWieder);
   var theme = allThemes.filter(function(t){ return t.id===S.themeId; })[0];
   if(theme) document.getElementById("hdr-theme").textContent = theme.title;
   renderQ();
@@ -1535,9 +1543,17 @@ function showResult(aborted) {
   var okCount = S.answers.filter(function(a){ return a.ok; }).length;
   var tot = S.answers.length;
   var pct = Math.round(okCount/tot*100);
-  var allThemes = (currentArea==='msa') 
-    ? MSA_THEMES.concat((MSA_EXTRA_THEMES || EXTRA_THEMES || [])).concat(MSA_10PKT_THEMES || []) 
-    : BBR_THEMES.concat(BBR_EXTRA_THEMES || []).concat(BBR_RECHTSCHREIBUNG_THEMES || []).concat(BBR_WIEDER_THEMES || []);
+  var _msaBase2  = typeof MSA_THEMES              !== 'undefined' ? MSA_THEMES              : [];
+  var _msaExtra2 = typeof MSA_EXTRA_THEMES        !== 'undefined' ? MSA_EXTRA_THEMES        :
+                   typeof EXTRA_THEMES            !== 'undefined' ? EXTRA_THEMES            : [];
+  var _msa10pkt2 = typeof MSA_10PKT_THEMES        !== 'undefined' ? MSA_10PKT_THEMES        : [];
+  var _bbrBase2  = typeof BBR_THEMES              !== 'undefined' ? BBR_THEMES              : [];
+  var _bbrExtra2 = typeof BBR_EXTRA_THEMES        !== 'undefined' ? BBR_EXTRA_THEMES        : [];
+  var _bbrRecht2 = typeof BBR_RECHTSCHREIBUNG_THEMES !== 'undefined' ? BBR_RECHTSCHREIBUNG_THEMES : [];
+  var _bbrWieder2= typeof BBR_WIEDER_THEMES       !== 'undefined' ? BBR_WIEDER_THEMES       : [];
+  var allThemes = (currentArea==='msa')
+    ? _msaBase2.concat(_msaExtra2).concat(_msa10pkt2)
+    : _bbrBase2.concat(_bbrExtra2).concat(_bbrRecht2).concat(_bbrWieder2);
   var theme = allThemes.filter(function(t){ return t.id===S.themeId; })[0];
   var totalQs = theme ? theme.qs.length : tot;
   var isIncomplete = aborted && tot<totalQs;

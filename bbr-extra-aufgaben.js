@@ -1472,9 +1472,9 @@ var BBR_EXTRA_THEMES = [
     ]
   },
   // ─────────────────────────────────────────────────────────────
-  // Thema 9: Häufige Rechtschreibprobleme (extra)
+  // Thema 9: Worttrennung (extra)
+  // (Thema "Rechtschreibung" → ausgelagert in bbr-rechtschreibung.js)
   // ─────────────────────────────────────────────────────────────
-  {
   {
     id: "bbr_extra_trennung",
     title: "Worttrennung (extra)",
