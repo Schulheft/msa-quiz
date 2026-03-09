@@ -7,6 +7,14 @@
 //   "kasus"   – Kasusfehler: Wort wählen + korrekte Form eingeben
 //   "satzbau" – Satzbaufehler: korrigierten Satz/Teil eingeben
 // ================================================================
+//
+// HINWEIS ZUR MOBILEN BEDIENUNG:
+// Bei Aufgaben, die das Antippen von Wörtern erfordern (rs, ausdruck, kasus),
+// kann die Bedienung auf mobilen Geräten durch zu kleine Touch-Ziele erschwert sein.
+// Es wird empfohlen, die interaktiven Elemente als gut anklickbare Buttons oder
+// vergrößerte Bereiche zu gestalten, um die Benutzerfreundlichkeit zu verbessern.
+//
+// ================================================================
 
 var MSA_UEBERARBEITUNG_THEMES = [
 
@@ -20,15 +28,15 @@ var MSA_UEBERARBEITUNG_THEMES = [
   color:"#2d9e6a",
   qs:[
 
-  // 501 – Z (Zeichensetzung / Komma)
+  // 501 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie das fehlende Komma im folgenden Satz:\n\nDie Spargelstange ist der Stängelspross der Spargelpflanze die zur Familie der Liliengewächse gehört.',
     sentence:'Die Spargelstange ist der Stängelspross der Spargelpflanze die zur Familie der Liliengewächse gehört.',
-    correctPositions:[44],
+    correctPositions:[57],
     acceptedAnswers: ['Die Spargelstange ist der Stängelspross der Spargelpflanze, die zur Familie der Liliengewächse gehört.'],
-    model:'... der Spargelpflanze, die zur Familie ...',
+    model:'Die Spargelstange ist der Stängelspross der Spargelpflanze, die zur Familie der Liliengewächse gehört.',
     rule:'<div class=rbox>Vor einleitenden Relativpronomen (die, der, das, welche …) steht immer ein Komma. „die zur Familie …" ist ein Relativsatz, der durch Komma vom Hauptsatz getrennt wird.</div>'
   },
 
@@ -43,9 +51,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„altbekannt" wird als zusammengesetztes Adjektiv zusammengeschrieben (wie altmodisch, altehrwürdig). Die Getrenntschreibung „alt bekannte" ist falsch.</div>'
   },
 
-  // 503 – G (Grammatik / Konjunktion)
+  // 503 – G (Satzbau – Konjunktion)
   {
-    sub:"Grammatikfehler – Konjunktion",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Grammatikfehler (falsche Konjunktion) im folgenden Satz:\n\nSpargelkulturen sollen über viele Jahre gute Erträge bringen, weil der Standort sorgfältig ausgewählt werden sollte.',
     prompt:'Schreiben Sie den Satz mit einer passenden Konjunktion:',
@@ -60,9 +68,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„weil" drückt einen Grund aus (→ Ursache). Hier wird aber eine Folge beschrieben: Weil die Erträge gut sein sollen, muss der Standort sorgfältig gewählt werden. Korrekte Konjunktionen für Folge/Schlussfolgerung: <span class=hl>sodass, weshalb, weswegen</span>. Auch möglich: Umstellung mit „daher/deshalb sollte der Standort …".</div>'
   },
 
-  // 504 – A (Ausdruck / umgangssprachlich)
+  // 504 – A (Ausdruck)
   {
-    sub:"Ausdrucksfehler – Umgangssprache",
+    sub:"Ausdruck",
     type:"ausdruck",
     q:'Korrigieren Sie den umgangssprachlichen Ausdruck im folgenden Satz:\n\nZur Ernte werden die Spargelstangen gestochen, was nach wie vor knüppelharte Handarbeit ist.',
     errorWord:'knüppelharte',
@@ -73,9 +81,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„knüppelhart" ist umgangssprachlich und unpassend für einen Sachtext. Standardsprachliche Alternativen: <span class=hl>äußerst hart, sehr schwer, mühsam, beschwerlich</span>.</div>'
   },
 
-  // 505 – A (Ausdruck / umgangssprachlich)
+  // 505 – A (Ausdruck)
   {
-    sub:"Ausdrucksfehler – Umgangssprache",
+    sub:"Ausdruck",
     type:"ausdruck",
     q:'Korrigieren Sie den umgangssprachlichen Ausdruck im folgenden Satz:\n\nSpargel ist ein Gemüse, welches in seinem Geschmack einzigartig und deshalb bei Feinschmeckern voll beliebt ist.',
     errorWord:'voll beliebt',
@@ -86,15 +94,15 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„voll" als Verstärker (voll cool, voll lecker) ist Jugendsprache/Umgangssprache. Im Sachtext verwendet man: <span class=hl>sehr, äußerst, außerordentlich, besonders</span>.</div>'
   },
 
-  // 506 – Z (Kommasetzung)
+  // 506 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie die fehlenden Kommas im folgenden Satz:\n\nFrüher wurden die Spargelstangen die noch nicht zerkleinert waren relativ umständlich mit den Fingern gegessen.',
     sentence:'Früher wurden die Spargelstangen die noch nicht zerkleinert waren relativ umständlich mit den Fingern gegessen.',
-    correctPositions:[33, 55],
+    correctPositions:[31, 64],
     acceptedAnswers: ['Früher wurden die Spargelstangen, die noch nicht zerkleinert waren, relativ umständlich mit den Fingern gegessen.'],
-    model:'… die Spargelstangen, die noch nicht zerkleinert waren, relativ …',
+    model:'Früher wurden die Spargelstangen, die noch nicht zerkleinert waren, relativ umständlich mit den Fingern gegessen.',
     rule:'<div class=rbox>Der Relativsatz „die noch nicht zerkleinert waren" wird beidseitig durch Kommas vom Hauptsatz abgetrennt: Komma vor dem einleitenden Relativpronomen <span class=hl>und</span> Komma nach dem Ende des Relativsatzes.</div>'
   },
 
@@ -109,9 +117,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„Spargelessen" ist ein Nomen (Substantiv) und wird daher <span class=hl>großgeschrieben</span>. Zusammengesetzte Nomen erhalten die Großschreibung am Wortanfang.</div>'
   },
 
-  // 508 – G (Kasus)
+  // 508 – G (Satzbau – Kasus)
   {
-    sub:"Grammatikfehler – Kasus",
+    sub:"Satzbau",
     type:"kasus",
     q:'Korrigieren Sie den Kasusfehler im folgenden Satz:\n\nFür die aus heutiger Sicht unsinnig erscheinende Sitte gab es ein einfachen Grund.',
     errorWord:'ein einfachen',
@@ -122,7 +130,7 @@ var MSA_UEBERARBEITUNG_THEMES = [
 
   // 509 – G (Satzbau)
   {
-    sub:"Grammatikfehler – Satzbau",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Satzbaufehler im folgenden Satz:\n\nWurde der Spargel geschnitten mit dem Messer, fing dieses stark zu rosten an.',
     prompt:'Schreiben Sie den korrigierten Satz:',
@@ -156,9 +164,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
   color:"#3d6b8f",
   qs:[
 
-  // 501 – Z (Kommasetzung)
+  // 501 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie das fehlende Komma im folgenden Satz:\n\nDer Traumberuf ist gefunden aber der Ausbildungsplatz fehlt noch.',
     sentence:'Der Traumberuf ist gefunden aber der Ausbildungsplatz fehlt noch.',
@@ -190,9 +198,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>Das Possessivpronomen „ihre" bezieht sich hier auf „Betriebe" (3. Person Plural) und wird <span class=hl>kleingeschrieben</span>. Großschreibung „Ihre" ist nur bei Höflichkeitsanrede (Sie/Ihre) korrekt.</div>'
   },
 
-  // 504 – G (Kasus)
+  // 504 – G (Satzbau – Kasus)
   {
-    sub:"Grammatikfehler – Kasus",
+    sub:"Satzbau",
     type:"kasus",
     q:'Korrigieren Sie den Kasusfehler im folgenden Satz:\n\nAusbildungsbörsen im Internet bieten ein großes Angebot an Ausbildungsplätze.',
     errorWord:'Ausbildungsplätze',
@@ -201,9 +209,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>Nach der Präposition „an" (im Sinne von „Angebot an etw.") steht der <span class=hl>Dativ Plural</span>: Ausbildungsplätzen (nicht Nominativ/Akkusativ Plural: Ausbildungsplätze).</div>'
   },
 
-  // 505 – A (Umgangssprache)
+  // 505 – A (Ausdruck)
   {
-    sub:"Ausdrucksfehler – Umgangssprache",
+    sub:"Ausdruck",
     type:"ausdruck",
     q:'Korrigieren Sie den umgangssprachlichen Ausdruck im folgenden Satz:\n\nWer eine passende Stelle gefunden hat, kriegt gleich die wichtigsten Informationen zum Betrieb.',
     errorWord:'kriegt',
@@ -214,9 +222,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„kriegen" ist umgangssprachlich. Im Sachtext verwendet man: <span class=hl>bekommen, erhalten</span>.</div>'
   },
 
-  // 506 – G (Kasus)
+  // 506 – G (Satzbau – Kasus)
   {
-    sub:"Grammatikfehler – Kasus",
+    sub:"Satzbau",
     type:"kasus",
     q:'Korrigieren Sie den Kasusfehler im folgenden Satz:\n\nDie Bundesagentur für Arbeit bietet Ausbildungssuchenden ein kostenlosen Vermittlungsservice an.',
     errorWord:'ein kostenlosen',
@@ -227,7 +235,7 @@ var MSA_UEBERARBEITUNG_THEMES = [
 
   // 507 – G (Satzbau)
   {
-    sub:"Grammatikfehler – Satzbau",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Satzbaufehler im folgenden Satz:\n\nIn einem individuellen Gespräch geben die Service-Berater weiter die Kontaktdaten von Betrieben.',
     prompt:'Schreiben Sie den korrigierten Satz:',
@@ -240,9 +248,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„weitergeben" ist ein trennbares Verb: das Präfix „weiter" steht am <span class=hl>Satzende</span>, nicht mitten im Satz. Falsch: „geben weiter die Kontaktdaten" – Richtig: „geben die Kontaktdaten weiter".</div>'
   },
 
-  // 508 – Z (Kommasetzung)
+  // 508 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie das fehlende Komma im folgenden Satz:\n\nBerufsmessen sind eine der besten Möglichkeiten sich einen Überblick über Ausbildungsbetriebe in der Region zu verschaffen.',
     sentence:'Berufsmessen sind eine der besten Möglichkeiten sich einen Überblick über Ausbildungsbetriebe in der Region zu verschaffen.',
@@ -252,9 +260,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>Vor einem erweiterten Infinitiv mit „zu" steht ein Komma, wenn er von einem Nomen abhängt (hier: Möglichkeiten, … zu verschaffen). Das Komma trennt den Infinitivsatz vom Rest ab.</div>'
   },
 
-  // 509 – A (Umgangssprache)
+  // 509 – A (Ausdruck)
   {
-    sub:"Ausdrucksfehler – Umgangssprache",
+    sub:"Ausdruck",
     type:"ausdruck",
     q:'Korrigieren Sie den umgangssprachlichen Ausdruck im folgenden Satz:\n\nMan kann die Personalverantwortlichen der Betriebe anquatschen und sogar gleich seine Bewerbungsunterlagen abgeben.',
     errorWord:'anquatschen',
@@ -286,9 +294,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
   color:"#7c3d8f",
   qs:[
 
-  // 501 – G (Tempus)
+  // 501 – G (Satzbau – Tempus)
   {
-    sub:"Grammatikfehler – Tempus",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Tempusfehler im folgenden Satz:\n\nIm 8. Jahrhundert entwickelt sich aus den kleinen Inseln einer sumpfigen Lagune die See- und Handelsmacht Venedig.',
     prompt:'Schreiben Sie den Satz im richtigen Tempus (Vergangenheit):',
@@ -312,13 +320,13 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„Grund" ist ein Nomen (Substantiv) und wird daher <span class=hl>großgeschrieben</span>.</div>'
   },
 
-  // 503 – Z (Kommasetzung)
+  // 503 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie das fehlende Komma im folgenden Satz:\n\nDer Canal Grande Venedigs großer Kanal durchfließt die Stadt in zwei großen Bogen und ist die wichtigste Verkehrsader.',
     sentence:'Der Canal Grande Venedigs großer Kanal durchfließt die Stadt in zwei großen Bogen und ist die wichtigste Verkehrsader.',
-    correctPositions:[16, 37],
+    correctPositions:[15, 37],
     acceptedAnswers: ['Der Canal Grande, Venedigs großer Kanal, durchfließt die Stadt in zwei großen Bogen und ist die wichtigste Verkehrsader.'],
     model:'Der Canal Grande, Venedigs großer Kanal, durchfließt …',
     rule:'<div class=rbox>„Venedigs großer Kanal" ist eine erklärende Apposition (Beifügung) zu „Canal Grande". Appositionen werden beidseitig durch <span class=hl>Kommas</span> abgetrennt.</div>'
@@ -347,9 +355,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„zahllos" → Plural mit Endung: „zahllosen". Das Wort hat <span class=hl>zwei l</span>, nicht drei. Komposita aus „Zahl" + „los" ergeben „zahllos".</div>'
   },
 
-  // 506 – G (Kasus)
+  // 506 – G (Satzbau – Kasus)
   {
-    sub:"Grammatikfehler – Kasus",
+    sub:"Satzbau",
     type:"kasus",
     q:'Korrigieren Sie den Kasusfehler im folgenden Satz:\n\nDer Glockenturm mit einer Höhe von 99 Meter ermöglicht einen herrlichen Blick über die Lagunenstadt.',
     errorWord:'von 99 Meter',
@@ -358,9 +366,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>Nach der Präposition „von" steht der <span class=hl>Dativ</span>. Dativ Plural von „Meter": <span class=hl>Metern</span> (nicht „Meter", das wäre Nominativ/Akkusativ).</div>'
   },
 
-  // 507 – A (Umgangssprache)
+  // 507 – A (Ausdruck)
   {
-    sub:"Ausdrucksfehler – Umgangssprache",
+    sub:"Ausdruck",
     type:"ausdruck",
     q:'Korrigieren Sie den umgangssprachlichen Ausdruck im folgenden Satz:\n\nViele Besucher gucken den herrlichen Markusdom und den Dogenpalast an.',
     errorWord:'gucken',
@@ -373,7 +381,7 @@ var MSA_UEBERARBEITUNG_THEMES = [
 
   // 508 – G (Satzbau)
   {
-    sub:"Grammatikfehler – Satzbau",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Satzbaufehler im folgenden Satz:\n\nAuch Venedigs Cafés sind beliebt, weil man kann dort guten Kaffee trinken.',
     prompt:'Schreiben Sie den Satz korrekt (Verbstellung im Nebensatz):',
@@ -388,9 +396,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>Im Nebensatz nach „weil" steht das Verb am <span class=hl>Satzende</span>: „weil man dort Kaffee trinken <span class=hl>kann</span>". Alternativ: Koordination mit „denn" (Hauptsatz, keine Umstellung nötig).</div>'
   },
 
-  // 509 – Z (Kommasetzung)
+  // 509 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie das fehlende Komma im folgenden Satz:\n\nDen Abend lässt man am besten in einem exquisiten Restaurant ausklingen wo man mit regionalen Köstlichkeiten verwöhnt wird.',
     sentence:'Den Abend lässt man am besten in einem exquisiten Restaurant ausklingen wo man mit regionalen Köstlichkeiten verwöhnt wird.',
@@ -400,9 +408,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„wo man … verwöhnt wird" ist ein Relativsatz (mit „wo") und wird durch ein <span class=hl>Komma</span> vom Hauptsatz getrennt.</div>'
   },
 
-  // 510 – G (Konjunktion)
+  // 510 – G (Satzbau – Konjunktion)
   {
-    sub:"Grammatikfehler – Konjunktion",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Grammatikfehler (falsche Konjunktion) im folgenden Satz:\n\nDoch die Stadt wird durch die gigantischen Kreuzfahrtschiffe bedroht, obwohl diese die Bausubstanz zerstören.',
     prompt:'Ersetzen Sie „obwohl" durch eine passende Konjunktion:',
@@ -426,9 +434,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
   color:"#e07b39",
   qs:[
 
-  // 481 – Z (Kommasetzung)
+  // 481 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie das fehlende Komma im folgenden Satz:\n\nEs ist nicht leicht ein passendes Geschenk für einen Freund zu finden.',
     sentence:'Es ist nicht leicht ein passendes Geschenk für einen Freund zu finden.',
@@ -449,9 +457,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„Tipps" schreibt sich mit <span class=hl>Doppel-p</span>. Einsilbige Wörter mit kurzem Vokal verdoppeln den Konsonanten beim Ableiten: Tipp → Tipps.</div>'
   },
 
-  // 483 – G (Kasus)
+  // 483 – G (Satzbau – Kasus)
   {
-    sub:"Grammatikfehler – Kasus",
+    sub:"Satzbau",
     type:"kasus",
     q:'Korrigieren Sie den Kasusfehler im folgenden Satz:\n\nIn Gespräche mit dem Freund erfahren Sie etwas über dessen Geschmack.',
     errorWord:'Gespräche',
@@ -460,9 +468,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>Die Präposition „in" verlangt hier den <span class=hl>Dativ</span> (Wo? → In Gesprächen). Dativ Plural von „Gespräch": <span class=hl>Gesprächen</span>.</div>'
   },
 
-  // 484 – G (Numerus)
+  // 484 – G (Satzbau – Numerus)
   {
-    sub:"Grammatikfehler – Numerus",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Numerusfehler im folgenden Satz:\n\nAuch die Kenntnis seiner Interessen und Hobbys können Ihnen helfen, die richtige Entscheidung zu treffen.',
     prompt:'Korrigieren Sie das Verb (Singular oder Plural?):',
@@ -498,9 +506,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„willkommen" wird mit <span class=hl>Doppel-m</span> geschrieben. In der Adjektivdeklination: willkommenes (Neutrum, Akkusativ).</div>'
   },
 
-  // 487 – A (Umgangssprache)
+  // 487 – A (Ausdruck)
   {
-    sub:"Ausdrucksfehler – Umgangssprache",
+    sub:"Ausdruck",
     type:"ausdruck",
     q:'Korrigieren Sie den umgangssprachlichen Ausdruck im folgenden Satz:\n\nTotal in sind auch Gutscheine für Shopping-Center.',
     errorWord:'Total in',
@@ -511,9 +519,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„Total in" ist Jugend-/Umgangssprache. Standardsprachliche Alternativen: <span class=hl>im Trend, zeitgemäß, beliebt, gefragt, modern</span>.</div>'
   },
 
-  // 488 – G (Konjunktion)
+  // 488 – G (Satzbau – Konjunktion)
   {
-    sub:"Grammatikfehler – Konjunktion",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Grammatikfehler (falsche Konjunktion) im folgenden Satz:\n\nGeldgeschenke sollten Sie jedoch vermeiden, weil diese sehr beliebt sind.',
     prompt:'Ersetzen Sie „weil" durch eine passende Konjunktion:',
@@ -527,21 +535,21 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>Hier besteht ein Widerspruch: Trotzdem, dass Geldgeschenke beliebt sind, soll man sie vermeiden. Das verlangt eine <span class=hl>konzessive</span> Konjunktion: <span class=hl>obwohl, obschon, auch wenn</span>.</div>'
   },
 
-  // 489 – Z (Kommasetzung)
+  // 489 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie das fehlende Komma im folgenden Satz:\n\nSie wirken unpersönlich bequem und einfallslos.',
     sentence:'Sie wirken unpersönlich bequem und einfallslos.',
-    correctPositions:[20],
+    correctPositions:[22],
     acceptedAnswers: ['Sie wirken unpersönlich, bequem und einfallslos.'],
     model:'Sie wirken unpersönlich, bequem und einfallslos.',
     rule:'<div class=rbox>Zwischen gleichrangigen Adjektiven in einer Aufzählung steht ein Komma (wenn kein „und" steht). „unpersönlich" und „bequem" sind hier gleichrangig und werden durch Komma getrennt; vor dem letzten Glied mit „und" entfällt das Komma.</div>'
   },
 
-  // 490 – A (Umgangssprache)
+  // 490 – A (Ausdruck)
   {
-    sub:"Ausdrucksfehler – Umgangssprache",
+    sub:"Ausdruck",
     type:"ausdruck",
     q:'Korrigieren Sie den umgangssprachlichen Ausdruck im folgenden Satz:\n\nLassen Sie sich also was Besonderes einfallen, wenn Sie Ihren Freund überraschen wollen.',
     errorWord:'was',
@@ -562,9 +570,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
   color:"#d94f4f",
   qs:[
 
-  // 481 – Z (Kommasetzung)
+  // 481 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie das fehlende Komma im folgenden Satz:\n\nDie Firma „Gartenglück" bietet einen Ausbildungsplatz zum Gärtner der Fachrichtung Landschaftsbau.',
     sentence:'Die Firma „Gartenglück" bietet einen Ausbildungsplatz zum Gärtner der Fachrichtung Landschaftsbau.',
@@ -574,9 +582,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„der Fachrichtung Landschaftsbau" ist eine Apposition (erklärende Beifügung) zu „Gärtner" und wird durch ein <span class=hl>Komma</span> abgetrennt.</div>'
   },
 
-  // 482 – G (Kasus)
+  // 482 – G (Satzbau – Kasus)
   {
-    sub:"Grammatikfehler – Kasus",
+    sub:"Satzbau",
     type:"kasus",
     q:'Korrigieren Sie den Kasusfehler im folgenden Satz:\n\nInteressenten müssen mindestens ein Abschluss, z. B. den der Berufsbildungsreife, vorweisen können.',
     errorWord:'ein Abschluss',
@@ -596,9 +604,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„körperlich" leitet sich von „Körper" ab und enthält das <span class=hl>ö</span> mit dem r danach: kö<span class=hl>r</span>perlich. Das r darf nicht fehlen.</div>'
   },
 
-  // 484 – G (Numerus)
+  // 484 – G (Satzbau – Numerus)
   {
-    sub:"Grammatikfehler – Numerus",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Numerusfehler im folgenden Satz:\n\nAuch technisches Verständnis und Teamfähigkeit ist von Vorteil.',
     prompt:'Korrigieren Sie das Verb:',
@@ -622,13 +630,13 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„vollständig" enthält den Umlaut <span class=hl>ä</span> (von „Stand"): vollst<span class=hl>ä</span>ndig. Nicht „vollstendig".</div>'
   },
 
-  // 486 – Z (Kommasetzung)
+  // 486 – Z (Komma)
   {
-    sub:"Zeichensetzung",
+    sub:"Komma",
     type:"komma",
     q:'Setzen Sie das fehlende Komma im folgenden Satz:\n\nDazu gehören Kopien der letzten beiden Zeugnisse der Praktikumsnachweise und ein tabellarischer Lebenslauf.',
     sentence:'Dazu gehören Kopien der letzten beiden Zeugnisse der Praktikumsnachweise und ein tabellarischer Lebenslauf.',
-    correctPositions:[51],
+    correctPositions:[47],
     acceptedAnswers: ['Dazu gehören Kopien der letzten beiden Zeugnisse, der Praktikumsnachweise und ein tabellarischer Lebenslauf.'],
     model:'… Zeugnisse, der Praktikumsnachweise und ein tabellarischer Lebenslauf.',
     rule:'<div class=rbox>„der Praktikumsnachweise" und „ein tabellarischer Lebenslauf" sind weitere Glieder der Aufzählung. Vor dem nächsten Aufzählungsglied (ohne „und") steht ein <span class=hl>Komma</span>.</div>'
@@ -636,7 +644,7 @@ var MSA_UEBERARBEITUNG_THEMES = [
 
   // 487 – A (Ausdruck)
   {
-    sub:"Ausdrucksfehler",
+    sub:"Ausdruck",
     type:"ausdruck",
     q:'Korrigieren Sie den Ausdrucksfehler im folgenden Satz:\n\nDer Bewerbungszeitraum endet bis zum 15. Januar 2015.',
     errorWord:'endet bis zum',
@@ -658,9 +666,9 @@ var MSA_UEBERARBEITUNG_THEMES = [
     rule:'<div class=rbox>„Ansprechpartnerinnen" (Plural, feminin) wird mit <span class=hl>Doppel-n</span> vor der Pluralendung geschrieben: Ansprechpartnerin + nen → Ansprechpartnerin<span class=hl>nen</span>.</div>'
   },
 
-  // 489 – G (Modus)
+  // 489 – G (Satzbau – Modus)
   {
-    sub:"Grammatikfehler – Modus",
+    sub:"Satzbau",
     type:"satzbau",
     q:'Korrigieren Sie den Modusfehler im folgenden Satz:\n\nDie Bewerbungsunterlagen wären an folgende Adresse zu richten:',
     prompt:'Korrigieren Sie den Modus (Konjunktiv → Indikativ):',
