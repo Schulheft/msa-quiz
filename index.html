@@ -439,7 +439,7 @@ body{font-family:"DM Sans",sans-serif;background:var(--paper);color:var(--ink);m
         <span class="nav-tab-label">Weitere Übungsaufgaben</span>
         <span class="nav-tab-sub">Zusätzlich</span>
       </div>
-      <div class="nav-tab" id="msa-tab-10pkt" onclick="switchAreaTab('msa','10pkt')">
+      <div class="nav-tab" id="msa-tab-10pkt" onclick="open10PktPage()">
         <span class="nav-tab-icon">🏆</span>
         <span class="nav-tab-label">10-Punkte-Tabelle</span>
         <span class="nav-tab-sub">Prüfungsübungen</span>
@@ -468,38 +468,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--paper);color:var(--ink);m
         <span><span class="dot" style="background:#16a34a"></span>90%+</span>
       </div>
       <div id="msa-extra-grid"></div>
-    </div>
-    <div id="msa-panel-10pkt" style="display:none">
-      <div class="nav-tabs" style="margin-bottom:18px">
-        <div class="nav-tab active-tab" id="msa-10pkt-tab-1" onclick="switch10PktTab(1)">
-          <span class="nav-tab-icon">📋</span>
-          <span class="nav-tab-label">1. Tabelle</span>
-        </div>
-        <div class="nav-tab" id="msa-10pkt-tab-2" onclick="switch10PktTab(2)">
-          <span class="nav-tab-icon">📋</span>
-          <span class="nav-tab-label">2. Tabelle</span>
-        </div>
-        <div class="nav-tab" id="msa-10pkt-tab-3" onclick="switch10PktTab(3)">
-          <span class="nav-tab-icon">📋</span>
-          <span class="nav-tab-label">3. Tabelle</span>
-        </div>
-        <div class="nav-tab" id="msa-10pkt-tab-4" onclick="switch10PktTab(4)">
-          <span class="nav-tab-icon">📋</span>
-          <span class="nav-tab-label">4. Tabelle</span>
-        </div>
-        <div class="nav-tab" id="msa-10pkt-tab-5" onclick="switch10PktTab(5)">
-          <span class="nav-tab-icon">📋</span>
-          <span class="nav-tab-label">5. Tabelle</span>
-        </div>
-      </div>
-      <div class="legend">
-        <span><span class="dot" style="background:#d1d5db"></span>Nicht geübt</span>
-        <span><span class="dot" style="background:#ef4444"></span>&lt;60%</span>
-        <span><span class="dot" style="background:#f97316"></span>60–79%</span>
-        <span><span class="dot" style="background:#eab308"></span>80–89%</span>
-        <span><span class="dot" style="background:#16a34a"></span>90%+</span>
-      </div>
-      <div id="msa-10pkt-grid"></div>
     </div>
     <div style="margin-top:24px">
       <button onclick="goStart()" class="btn btn-ol">← Zurück</button>
@@ -560,6 +528,57 @@ body{font-family:"DM Sans",sans-serif;background:var(--paper);color:var(--ink);m
     </div>
     <div style="margin-top:24px">
       <button onclick="goStart()" class="btn btn-ol">← Zurück</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 10-PUNKTE-TABELLE ════════════════════════════════════════ -->
+<div id="pg-10pkt" class="page">
+  <div class="hdr">
+    <span class="hdr-m">MSA</span><span class="hdr-sub">10-Punkte-Tabelle</span>
+  </div>
+  <div class="area-inner fu">
+    <div class="area-hero">
+      <h2>10-Punkte-Tabelle</h2>
+      <p>Wähle eine Tabelle zum Üben</p>
+    </div>
+    <div class="nav-tabs" style="margin-bottom:18px">
+      <div class="nav-tab active-tab" id="tab-10pkt-1" onclick="switch10PktTab(1)">
+        <span class="nav-tab-icon">📋</span>
+        <span class="nav-tab-label">1. Tabelle</span>
+        <span class="nav-tab-sub">Spargel</span>
+      </div>
+      <div class="nav-tab" id="tab-10pkt-2" onclick="switch10PktTab(2)">
+        <span class="nav-tab-icon">📋</span>
+        <span class="nav-tab-label">2. Tabelle</span>
+        <span class="nav-tab-sub">Ausbildung</span>
+      </div>
+      <div class="nav-tab" id="tab-10pkt-3" onclick="switch10PktTab(3)">
+        <span class="nav-tab-icon">📋</span>
+        <span class="nav-tab-label">3. Tabelle</span>
+        <span class="nav-tab-sub">Werbung</span>
+      </div>
+      <div class="nav-tab" id="tab-10pkt-4" onclick="switch10PktTab(4)">
+        <span class="nav-tab-icon">📋</span>
+        <span class="nav-tab-label">4. Tabelle</span>
+        <span class="nav-tab-sub">Kochen</span>
+      </div>
+      <div class="nav-tab" id="tab-10pkt-5" onclick="switch10PktTab(5)">
+        <span class="nav-tab-icon">📋</span>
+        <span class="nav-tab-label">5. Tabelle</span>
+        <span class="nav-tab-sub">Gärtner</span>
+      </div>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:#d1d5db"></span>Nicht geübt</span>
+      <span><span class="dot" style="background:#ef4444"></span>&lt;60%</span>
+      <span><span class="dot" style="background:#f97316"></span>60–79%</span>
+      <span><span class="dot" style="background:#eab308"></span>80–89%</span>
+      <span><span class="dot" style="background:#16a34a"></span>90%+</span>
+    </div>
+    <div id="msa-10pkt-grid"></div>
+    <div style="margin-top:24px">
+      <button onclick="openArea('msa')" class="btn btn-ol">← Zurück</button>
     </div>
   </div>
 </div>
@@ -712,6 +731,19 @@ function autoCheck(q,inp) {
   if(q.type==="alt") {
     for(var i=0;i<q.a.length;i++) {
       if(stemMatch(q.a[i],inp)) return true;
+    }
+    return false;
+  }
+  // Neue Typen aus 10-Punkte-Tabelle
+  if(q.type==="rs" || q.type==="kasus") {
+    return stemMatch(q.correctWord, inp);
+  }
+  if(q.type==="ausdruck" || q.type==="satzbau" || q.type==="komma") {
+    var answers = q.acceptedAnswers || [];
+    var inpN = norm(inp);
+    for(var j=0;j<answers.length;j++) {
+      var aN = norm(answers[j]);
+      if(inpN===aN || inpN.indexOf(aN)!==-1) return true;
     }
     return false;
   }
@@ -880,9 +912,23 @@ function openArea(area) {
   switchAreaTab(area, 'aufgaben');
   showPage(area);
 }
-function goBackFromStat() { openArea(currentArea); }
-function goBackFromQuiz() { openArea(currentArea); }
-function goBackFromResult() { openArea(currentArea); }
+function open10PktPage() {
+  currentArea = '10pkt';
+  showPage('10pkt');
+  switch10PktTab(current10PktTab);
+}
+function goBackFromStat() {
+  if(currentArea === '10pkt') { showPage('10pkt'); return; }
+  openArea(currentArea);
+}
+function goBackFromQuiz() {
+  if(currentArea === '10pkt') { showPage('10pkt'); return; }
+  openArea(currentArea);
+}
+function goBackFromResult() {
+  if(currentArea === '10pkt') { showPage('10pkt'); return; }
+  openArea(currentArea);
+}
 function goBackFromGram() {
   renderArea(gramFromArea);
   showPage(gramFromArea);
@@ -907,7 +953,7 @@ function renderStart() {
 
 // ================================ BEREICH (MSA/BBR) ================================
 function switchAreaTab(area, tab) {
-  var allTabs = (area === 'msa') ? ['aufgaben','regeln','extra','10pkt'] : ['aufgaben','regeln','extra'];
+  var allTabs = (area === 'msa') ? ['aufgaben','regeln','extra'] : ['aufgaben','regeln','extra'];
   allTabs.forEach(function(t) {
     var tabEl = document.getElementById(area+'-tab-'+t);
     var panelEl = document.getElementById(area+'-panel-'+t);
@@ -930,32 +976,31 @@ var current10PktTab = 1;
 function switch10PktTab(nr) {
   current10PktTab = nr;
   for (var i = 1; i <= 5; i++) {
-    var el = document.getElementById('msa-10pkt-tab-'+i);
+    var el = document.getElementById('tab-10pkt-'+i);
     if (el) el.classList.toggle('active-tab', i === nr);
   }
   render10PktGrid(nr);
 }
 
 function render10PktGrid(nr) {
-  var themes = (typeof MSA_10PKT_THEMES !== 'undefined')
-    ? MSA_10PKT_THEMES.filter(function(t){ return t.tabelle === nr; })
-    : [];
+  var allThemes = (typeof MSA_UEBERARBEITUNG_THEMES !== 'undefined') ? MSA_UEBERARBEITUNG_THEMES : [];
+  // Jede Tabelle entspricht einem Theme per Index (0-basiert)
+  var theme = allThemes[nr - 1];
   var s = sc();
   var html = '';
-  themes.forEach(function(t) {
-    var st = s[t.id];
+  if (theme) {
+    var st = s[theme.id];
     var pct = st ? st.pct : undefined;
     var lastDate = st ? fmtDate(st.ts) : '';
-    html += '<div class="card tc" style="border-left-color:'+t.color+'" onclick="openStatPage(\''+t.id+'\',\'msa\')">' +
-            '<div class="tc-emoji">'+t.emoji+'</div>' +
-            '<div class="tc-title">'+t.title+'</div>' +
-            '<div class="tc-meta">'+t.qs.length+' Aufgaben</div>' +
-            '<div class="tc-score"><span class="dot" style="background:'+scCol(pct)+'"></span><span>'+(pct!==undefined?pct+'%':'—')+'</span></div>' +
-            (lastDate?'<div class="tc-lastdate">📅 '+lastDate+'</div>':'') +
-            '</div>';
-  });
-  if (html === '') {
-    html = '<div class="coming-soon"><div class="coming-soon-icon">🏆</div><h3>Noch keine Aufgaben</h3><p>Füge Aufgaben in msa-10Pkt.js mit <code>tabelle: '+nr+'</code> hinzu.</p></div>';
+    html = '<div class="card tc" style="border-left-color:'+theme.color+'" onclick="openStatPage(\''+theme.id+'\',\'10pkt\')">' +
+           '<div class="tc-emoji">'+theme.emoji+'</div>' +
+           '<div class="tc-title">'+theme.title+'</div>' +
+           '<div class="tc-meta">'+theme.qs.length+' Aufgaben</div>' +
+           '<div class="tc-score"><span class="dot" style="background:'+scCol(pct)+'"></span><span>'+(pct!==undefined?pct+'%':'—')+'</span></div>' +
+           (lastDate?'<div class="tc-lastdate">📅 '+lastDate+'</div>':'') +
+           '</div>';
+  } else {
+    html = '<div class="coming-soon"><div class="coming-soon-icon">🏆</div><h3>Noch keine Aufgaben</h3><p>Füge Aufgaben für Tabelle '+nr+' in msa-10Pkt.js hinzu.</p></div>';
   }
   document.getElementById('msa-10pkt-grid').innerHTML = html;
 }
@@ -1101,6 +1146,22 @@ function gramSearch(val) {
     '<p style="opacity:.4;text-align:center;padding:30px">Keine Ergebnisse für "'+val+'"</p>';
 }
 
+// ================================ THEME-LOOKUP ================================
+function getAllThemes() {
+  var _msaBase  = typeof MSA_THEMES                 !== 'undefined' ? MSA_THEMES                 : [];
+  var _msaExtra = typeof MSA_EXTRA_THEMES           !== 'undefined' ? MSA_EXTRA_THEMES           :
+                  typeof EXTRA_THEMES               !== 'undefined' ? EXTRA_THEMES               : [];
+  var _10pkt    = typeof MSA_UEBERARBEITUNG_THEMES  !== 'undefined' ? MSA_UEBERARBEITUNG_THEMES  : [];
+  var _bbrBase  = typeof BBR_THEMES                 !== 'undefined' ? BBR_THEMES                 : [];
+  var _bbrExtra = typeof BBR_EXTRA_THEMES           !== 'undefined' ? BBR_EXTRA_THEMES           : [];
+  var _bbrRecht = typeof BBR_RECHTSCHREIBUNG_THEMES !== 'undefined' ? BBR_RECHTSCHREIBUNG_THEMES : [];
+  var _bbrWieder= typeof BBR_WIEDER_THEMES          !== 'undefined' ? BBR_WIEDER_THEMES          : [];
+  if(currentArea === 'msa')   return _msaBase.concat(_msaExtra).concat(_10pkt);
+  if(currentArea === 'bbr')   return _bbrBase.concat(_bbrExtra).concat(_bbrRecht).concat(_bbrWieder);
+  if(currentArea === '10pkt') return _10pkt;
+  return [];
+}
+
 // ================================ STATISTIK ================================
 function scCol(p) {
   if(p===undefined||p===null) return"#d1d5db";
@@ -1113,17 +1174,7 @@ function scCol(p) {
 
 function openStatPage(themeId, area) {
   currentArea = area || currentArea;
-  var _msaBase  = typeof MSA_THEMES              !== 'undefined' ? MSA_THEMES              : [];
-  var _msaExtra = typeof MSA_EXTRA_THEMES        !== 'undefined' ? MSA_EXTRA_THEMES        :
-                  typeof EXTRA_THEMES            !== 'undefined' ? EXTRA_THEMES            : [];
-  var _msa10pkt = typeof MSA_10PKT_THEMES        !== 'undefined' ? MSA_10PKT_THEMES        : [];
-  var _bbrBase  = typeof BBR_THEMES              !== 'undefined' ? BBR_THEMES              : [];
-  var _bbrExtra = typeof BBR_EXTRA_THEMES        !== 'undefined' ? BBR_EXTRA_THEMES        : [];
-  var _bbrRecht = typeof BBR_RECHTSCHREIBUNG_THEMES !== 'undefined' ? BBR_RECHTSCHREIBUNG_THEMES : [];
-  var _bbrWieder= typeof BBR_WIEDER_THEMES       !== 'undefined' ? BBR_WIEDER_THEMES       : [];
-  var allThemes = (currentArea==='msa')
-    ? _msaBase.concat(_msaExtra).concat(_msa10pkt)
-    : _bbrBase.concat(_bbrExtra).concat(_bbrRecht).concat(_bbrWieder);
+  var allThemes = getAllThemes();
   var theme = allThemes.filter(function(t){ return t.id===themeId; })[0];
   if(!theme) return;
   pendingThemeId = themeId;
@@ -1204,17 +1255,7 @@ function startFromStat() {
 
 // ================================ QUIZ-START ================================
 function startTheme(id) {
-  var _msaBase  = typeof MSA_THEMES              !== 'undefined' ? MSA_THEMES              : [];
-  var _msaExtra = typeof MSA_EXTRA_THEMES        !== 'undefined' ? MSA_EXTRA_THEMES        :
-                  typeof EXTRA_THEMES            !== 'undefined' ? EXTRA_THEMES            : [];
-  var _msa10pkt = typeof MSA_10PKT_THEMES        !== 'undefined' ? MSA_10PKT_THEMES        : [];
-  var _bbrBase  = typeof BBR_THEMES              !== 'undefined' ? BBR_THEMES              : [];
-  var _bbrExtra = typeof BBR_EXTRA_THEMES        !== 'undefined' ? BBR_EXTRA_THEMES        : [];
-  var _bbrRecht = typeof BBR_RECHTSCHREIBUNG_THEMES !== 'undefined' ? BBR_RECHTSCHREIBUNG_THEMES : [];
-  var _bbrWieder= typeof BBR_WIEDER_THEMES       !== 'undefined' ? BBR_WIEDER_THEMES       : [];
-  var allThemes = (currentArea==='msa')
-    ? _msaBase.concat(_msaExtra).concat(_msa10pkt)
-    : _bbrBase.concat(_bbrExtra).concat(_bbrRecht).concat(_bbrWieder);
+  var allThemes = getAllThemes();
   var theme = allThemes.filter(function(t){ return t.id===id; })[0];
   if(!theme) return;
   S.themeId = id;
@@ -1225,7 +1266,7 @@ function startTheme(id) {
   S.savedQs = null;
   S.savedIdx = 0;
   document.getElementById("hdr-theme").textContent = theme.title;
-  document.getElementById("quiz-area-label").textContent = currentArea.toUpperCase();
+  document.getElementById("quiz-area-label").textContent = currentArea==='10pkt' ? 'MSA' : currentArea.toUpperCase();
   renderQ();
   showPage("quiz");
 }
@@ -1382,25 +1423,48 @@ function checkCross(q) {
 }
 
 function renderText(q) {
-  var isLong = q.type==="self" || (q.q.match(/\n/g)||[]).length>2;
+  var newTypes = ['rs','kasus','ausdruck','satzbau','komma'];
+  var isNew = newTypes.indexOf(q.type) !== -1;
+  var isLong = q.type==="self" || q.type==="satzbau" || q.type==="komma" || (q.q.match(/\n/g)||[]).length>2;
+
+  // Extra-Anweisung für neue Typen (q.prompt)
+  if(isNew && q.prompt) {
+    var hint = document.createElement("p");
+    hint.style.cssText = "font-size:.82rem;font-weight:600;color:var(--blue);margin-bottom:8px;";
+    hint.textContent = q.prompt;
+    document.getElementById("ans-wrap").appendChild(hint);
+  }
+
+  // Bei rs/kasus: fehlerhaftes Wort hervorheben
+  if((q.type==="rs"||q.type==="kasus"||q.type==="ausdruck") && q.errorWord) {
+    var errHint = document.createElement("p");
+    errHint.style.cssText = "font-size:.8rem;margin-bottom:8px;";
+    errHint.innerHTML = '✏️ Fehlerhaftes Wort: <span style="background:#fde8e8;border:1px solid #d94f4f;border-radius:5px;padding:1px 7px;font-weight:700;color:#991b1b;">'+q.errorWord+'</span>';
+    document.getElementById("ans-wrap").appendChild(errHint);
+  }
+
   var inp = document.createElement("textarea");
   inp.className = "ans-input";
   inp.rows = isLong ? 4 : 2;
-  inp.placeholder = q.type==="self" ? "Deine Antwort / Erklärung …" : "Antwort eingeben …";
+  inp.placeholder = q.placeholder || (q.type==="self" ? "Deine Antwort / Erklärung …" : "Korrektur eingeben …");
   inp.id = "main-inp";
   inp.setAttribute("data-qtype", q.type);
   inp.oninput = function(){ document.getElementById("btn-ok").disabled = this.value.trim()===""; };
   inp.onkeydown = function(e){
-    var isAlt = this.getAttribute("data-qtype")==="alt";
+    var t = this.getAttribute("data-qtype");
     if(e.key==="Enter" && !S.answered){
-      if(isAlt && !e.shiftKey){ e.preventDefault(); doConfirm(); }
-      else if(!isAlt && e.shiftKey){ e.preventDefault(); doConfirm(); }
+      if(t==="alt" && !e.shiftKey){ e.preventDefault(); doConfirm(); }
+      else if(t==="self"||t==="satzbau"||t==="komma"){ if(e.shiftKey){ e.preventDefault(); doConfirm(); } }
+      else if(t!=="self" && !e.shiftKey){ e.preventDefault(); doConfirm(); }
     }
   };
   document.getElementById("ans-wrap").appendChild(inp);
   var okBtn = document.getElementById("btn-ok");
   okBtn.style.display = ""; okBtn.disabled = true;
-  setHint(q.type==="self" ? "Shift+Enter = bestätigen  ·  Enter = neue Zeile  ·  → = weiter" : "Enter = bestätigen  ·  → = weiter");
+  var hintMsg = (q.type==="self"||q.type==="satzbau"||q.type==="komma")
+    ? "Shift+Enter = bestätigen  ·  → = weiter"
+    : "Enter = bestätigen  ·  → = weiter";
+  setHint(hintMsg);
   setTimeout(function(){ inp.focus(); },50);
 }
 
@@ -1522,17 +1586,7 @@ function continueQuiz() {
   S.answers = [];
   S.answered = false;
   S.savedQs = null;
-  var _msaBase  = typeof MSA_THEMES              !== 'undefined' ? MSA_THEMES              : [];
-  var _msaExtra = typeof MSA_EXTRA_THEMES        !== 'undefined' ? MSA_EXTRA_THEMES        :
-                  typeof EXTRA_THEMES            !== 'undefined' ? EXTRA_THEMES            : [];
-  var _msa10pkt = typeof MSA_10PKT_THEMES        !== 'undefined' ? MSA_10PKT_THEMES        : [];
-  var _bbrBase  = typeof BBR_THEMES              !== 'undefined' ? BBR_THEMES              : [];
-  var _bbrExtra = typeof BBR_EXTRA_THEMES        !== 'undefined' ? BBR_EXTRA_THEMES        : [];
-  var _bbrRecht = typeof BBR_RECHTSCHREIBUNG_THEMES !== 'undefined' ? BBR_RECHTSCHREIBUNG_THEMES : [];
-  var _bbrWieder= typeof BBR_WIEDER_THEMES       !== 'undefined' ? BBR_WIEDER_THEMES       : [];
-  var allThemes = (currentArea==='msa')
-    ? _msaBase.concat(_msaExtra).concat(_msa10pkt)
-    : _bbrBase.concat(_bbrExtra).concat(_bbrRecht).concat(_bbrWieder);
+  var allThemes = getAllThemes();
   var theme = allThemes.filter(function(t){ return t.id===S.themeId; })[0];
   if(theme) document.getElementById("hdr-theme").textContent = theme.title;
   renderQ();
@@ -1543,17 +1597,7 @@ function showResult(aborted) {
   var okCount = S.answers.filter(function(a){ return a.ok; }).length;
   var tot = S.answers.length;
   var pct = Math.round(okCount/tot*100);
-  var _msaBase2  = typeof MSA_THEMES              !== 'undefined' ? MSA_THEMES              : [];
-  var _msaExtra2 = typeof MSA_EXTRA_THEMES        !== 'undefined' ? MSA_EXTRA_THEMES        :
-                   typeof EXTRA_THEMES            !== 'undefined' ? EXTRA_THEMES            : [];
-  var _msa10pkt2 = typeof MSA_10PKT_THEMES        !== 'undefined' ? MSA_10PKT_THEMES        : [];
-  var _bbrBase2  = typeof BBR_THEMES              !== 'undefined' ? BBR_THEMES              : [];
-  var _bbrExtra2 = typeof BBR_EXTRA_THEMES        !== 'undefined' ? BBR_EXTRA_THEMES        : [];
-  var _bbrRecht2 = typeof BBR_RECHTSCHREIBUNG_THEMES !== 'undefined' ? BBR_RECHTSCHREIBUNG_THEMES : [];
-  var _bbrWieder2= typeof BBR_WIEDER_THEMES       !== 'undefined' ? BBR_WIEDER_THEMES       : [];
-  var allThemes = (currentArea==='msa')
-    ? _msaBase2.concat(_msaExtra2).concat(_msa10pkt2)
-    : _bbrBase2.concat(_bbrExtra2).concat(_bbrRecht2).concat(_bbrWieder2);
+  var allThemes = getAllThemes();
   var theme = allThemes.filter(function(t){ return t.id===S.themeId; })[0];
   var totalQs = theme ? theme.qs.length : tot;
   var isIncomplete = aborted && tot<totalQs;
