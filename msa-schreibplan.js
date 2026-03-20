@@ -13,6 +13,7 @@
     these:      null,   // 'A' = Verzicht | 'B' = Medien gehören dazu
     votes:      {},     // { 0: 'pro'|'contra', 1: ..., 2: ..., 3: ... }
     argChoices: {},     // { '<stepN>': { bub: 0|1, opt: 0|1 } }
+    fazitSel:   [],     // Indizes der gewählten stärksten Argumente im Fazit
   };
 
   /* ═══════════════════════════════════════════════════════════
@@ -33,16 +34,20 @@
       bubble: SPRECHBLASEN[2],
       args:   ['Gesellschaftsspiele fördern echte Gemeinschaft', 'Analoge Spiele schaffen unvergessliche Erlebnisse ohne Bildschirm'],
       belege: [
-        'Gesellschaftsspiele → alle mitmachen, niemand am Handy',
-        'Spieleabend auf Fahrt → gemeinsame Erinnerungen stärker als Fotos',
+        { text: 'Gesellschaftsspiele → alle mitmachen, niemand am Handy', correct: true },
+        { text: 'Spieleabend auf Fahrt → gemeinsame Erinnerungen stärker als Fotos', correct: true },
+        { text: 'Gesellschaftsspiele sind teuer und schwer mitzunehmen', correct: false, type: 'unlogisch', explanation: '❌ Unlogisch: Diese Aussage widerspricht dem Argument – ob Spiele teuer sind, hat nichts damit zu tun, ob sie Gemeinschaft fördern.' },
+        { text: 'Spiele machen Spaß', correct: false, type: 'oberflächlich', explanation: '❌ Zu oberflächlich: Diese Aussage ist zu allgemein und belegt das Argument nicht konkret genug.' },
       ],
     },
     {
       bubble: SPRECHBLASEN[3],
       args:   ['Tiefere, persönlichere Kommunikation möglich', 'Offenere Gespräche ohne digitale Ablenkung'],
       belege: [
-        'kein Handy → keine Unterbrechungen, konzentrierteres Gespräch',
-        'persönliche Gespräche → tiefere Freundschaften',
+        { text: 'kein Handy → keine Unterbrechungen, konzentrierteres Gespräch', correct: true },
+        { text: 'persönliche Gespräche → tiefere Freundschaften', correct: true },
+        { text: 'Ohne Handy werden Gespräche langweiliger', correct: false, type: 'unlogisch', explanation: '❌ Unlogisch: Das Gegenteil ist gemeint – ohne Handyablenkung werden Gespräche intensiver, nicht langweiliger.' },
+        { text: 'Reden ist wichtig', correct: false, type: 'oberflächlich', explanation: '❌ Zu oberflächlich: Diese Aussage erklärt nicht, warum Gespräche ohne Handy besser sind.' },
       ],
     },
   ];
@@ -51,22 +56,29 @@
       bubble: SPRECHBLASEN[0],
       args:   ['Keine Fotos als Urlaubserinnerungen', 'Kein Festhalten schöner Momente möglich'],
       belege: [
-        'Fotos → bleibende Erinnerungen auch nach Jahren',
-        'Gruppenfotos als gemeinsames Reiseandenken',
+        { text: 'Fotos → bleibende Erinnerungen auch nach Jahren', correct: true },
+        { text: 'Gruppenfotos als gemeinsames Reiseandenken', correct: true },
+        { text: 'Mit Fotos kann man anderen zeigen, wie toll man reist', correct: false, type: 'unlogisch', explanation: '❌ Unlogisch: Das klingt nach Angeben – das ist kein stichhaltiger Beleg für den Wert von Fotos als Erinnerungen.' },
+        { text: 'Fotos sind schön', correct: false, type: 'oberflächlich', explanation: '❌ Zu oberflächlich: Diese Aussage ist zu allgemein und belegt das Argument nicht konkret.' },
       ],
     },
     {
       bubble: SPRECHBLASEN[1],
       args:   ['Eingeschränkte Erreichbarkeit bei Notfällen', 'Keine schnelle Hilfe im Notfall möglich'],
       belege: [
-        'Unfall / Erkrankung → Notruf lebensnotwendig',
-        'Elternkontakt bei dringenden Problemen nötig',
+        { text: 'Unfall / Erkrankung → Notruf lebensnotwendig', correct: true },
+        { text: 'Elternkontakt bei dringenden Problemen nötig', correct: true },
+        { text: 'Notfälle kommen auf Klassenfahrten eigentlich nie vor', correct: false, type: 'unlogisch', explanation: '❌ Unlogisch: Das widerspricht dem Argument – Notfälle können immer vorkommen, deshalb braucht man ein Handy.' },
+        { text: 'Man braucht ein Handy', correct: false, type: 'oberflächlich', explanation: '❌ Zu oberflächlich: Das ist keine Begründung, sondern nur eine Aussage ohne Erklärung.' },
       ],
     },
   ];
 
   const EIGENE_A = ['Mehr Bewegung und Naturerlebnisse möglich', 'Unabhängigkeit vom Internet stärkt Selbstvertrauen', 'Gemeinsame Erlebnisse ohne Ablenkung'];
   const EIGENE_B = ['Google Maps für Navigation', 'Informationen im Internet suchen', 'Kontakt zur Familie jederzeit gewährleistet'];
+
+  const EIGENE_A_FALSCH = { text: 'Handys sind zu teuer und zu zerbrechlich', explanation: '❌ Unlogisch: Die Kosten oder Zerbrechlichkeit eines Handys sind kein Argument dafür, auf digitale Medien zu verzichten. Es geht um gemeinsame Erlebnisse, nicht um den Wert des Geräts.' };
+  const EIGENE_B_FALSCH = { text: 'Mit dem Handy sieht man cooler aus', explanation: '❌ Zu oberflächlich: Außenwirkung ist kein stichhaltiges Argument. Überzeugende Argumente beziehen sich auf Sicherheit, Nützlichkeit oder konkrete Vorteile.' };
 
   const TOTAL = 12;
 
@@ -161,20 +173,28 @@
       ${progress(1)}
       ${chip('Einleitung', '#0ea5e9')}
       <h3 style="margin:4px 0 14px">Schreibanlass</h3>
-      ${box(`<p style="font-size:.9rem">Der ${r('Schreibanlass')} erklärt, ${r('warum du schreibst')}. Notiere stichwortartig, was der Anlass für den Text ist.</p>`)}
+      ${box(`
+        <p style="font-size:.82rem;opacity:.7;line-height:1.6;margin-bottom:0">
+          Da dieser Vorschlag in Ihrer Klasse kontrovers diskutiert wird, soll darüber abgestimmt werden.
+          Deshalb muss sich jeder intensiv mit dem Vorschlag auseinandersetzen.
+          Verfassen Sie in Vorbereitung auf die Abstimmung eine Erörterung.
+        </p>
+      `)}
+      ${box(`<p style="font-size:.9rem">Der ${r('Schreibanlass')} erklärt, ${r('warum du schreibst')}. Überlege dir, was der Anlass für den Text ist.</p>`)}
       ${toggleBtn('sp-btn-loesung', '✏️ Musterlösung anzeigen', '✏️', '#8b5cf6')}
       ${toggleBox('sp-box-loesung', `
         <p style="font-size:.78rem;font-weight:700;opacity:.5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Mögliche Stichpunkte:</p>
         <ul style="padding-left:16px;font-size:.88rem;line-height:2.4;margin:0">
-          <li>${r('kommende Abschlussfahrt')}</li>
-          <li>${r('Vorschlag')} der Eltern und Klassenlehrerin: Verzicht auf digitale Medien während der Fahrt</li>
+          <li>Kommende Abschlussfahrt</li>
+          <li>Vorschlag der Eltern und Klassenlehrerin: Verzicht auf digitale Medien während der Fahrt</li>
         </ul>
       `)}
       ${toggleBtn('sp-btn-hilfe', '💡 Hilfe', '💡')}
       ${toggleBox('sp-box-hilfe', `
-        <p style="font-weight:600;margin-bottom:6px">💡 Eine andere Möglichkeit wäre:</p>
+        <p style="font-weight:600;margin-bottom:6px">💡 Hinweis:</p>
         <ul style="padding-left:16px;font-size:.87rem;line-height:2;margin:0">
-          <li>${grn('Abschlussfahrt geplant – Vorschlag: kein Handy – Abstimmung nötig')}</li>
+          <li>Der Schreibanlass steht immer im ${grn('ersten Teil der Aufgabenstellung')}.</li>
+          <li>${grn('Eine andere Möglichkeit wäre: Abschlussfahrt geplant – Vorschlag: kein Handy – Abstimmung nötig')}</li>
         </ul>
       `)}
       ${navigation()}`;
@@ -194,24 +214,22 @@
         </p>
       `)}
       ${box(`
-        <p style="font-size:.9rem">Die ${r('Hinführung')} stellt einen ${r('überzeugenden Bezug')} zur Themafrage her.
-        Warum ist das Thema für dich und deine Klasse wichtig? Warum und was für einen Text wirst du schreiben?</p>
+        <p style="font-size:.9rem">Eine ${r('Hinführung')} gibt dem Leser Informationen, warum du jetzt schreibst und wie du vorgehst. Überlege dir einen möglichen Schreibanlass.</p>
       `)}
-      ${toggleBtn('sp-btn-loesung', '✏️ Musterlösung anzeigen', '✏️', '#8b5cf6')}
+      ${toggleBtn('sp-btn-loesung', '📝 Mögliche Stichpunkte', '📝', '#8b5cf6')}
       ${toggleBox('sp-box-loesung', `
         <p style="font-size:.78rem;font-weight:700;opacity:.5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Mögliche Stichpunkte:</p>
         <ul style="padding-left:16px;font-size:.88rem;line-height:2.4;margin:0">
           <li>${r('Kontroverse Diskussion')} in der Klasse, baldige Abstimmung</li>
         </ul>
       `)}
-      ${toggleBtn('sp-btn-hilfe', '💡 Hilfe', '💡')}
+      ${toggleBtn('sp-btn-hilfe', '💡 Wortspeicher', '💡')}
       ${toggleBox('sp-box-hilfe', `
-        <p style="font-weight:600;margin-bottom:8px">💡 So gelingt die Hinführung:</p>
+        <p style="font-weight:600;margin-bottom:8px">💡 Wortspeicher:</p>
         <ul style="padding-left:16px;font-size:.87rem;line-height:2">
-          <li>Stelle die Frage, über die abgestimmt wird</li>
-          <li>Erkläre kurz, warum das Thema wichtig ist</li>
-          <li>Hilfe-Stichpunkt: ${grn('<em>Diskussion über möglichen Verzicht auf soziale Medien</em>')}</li>
-          <li>Beispiel-Satz: ${grn('<em>„Digitale Medien sind kaum wegzudenken – doch gehören sie auch auf eine Klassenfahrt?"</em>')}</li>
+          <li>${grn('Erörterung pro und contra')}</li>
+          <li>${grn('Erörterung der Problemfrage')}</li>
+          <li>${grn('Darstellung der Diskussion')}</li>
         </ul>
       `)}
       ${navigation()}`;
@@ -223,7 +241,7 @@
       ${progress(3)}
       ${chip('Hauptteil – These', '#8b5cf6')}
       <h3 style="margin:4px 0 14px">Wähle deine These</h3>
-      ${box(`<p style="font-size:.87rem;opacity:.65;margin-bottom:12px">Entscheide: Welche Position vertrittst du in deiner Erörterung?</p>
+      ${box(`<p style="font-size:.87rem;opacity:.65;margin-bottom:12px">Entscheide: Welche Position vertrittst du in deiner Erörterung? Klicke an.</p>
         <div id="sp-these-a" style="padding:14px;border-radius:10px;border:2px solid rgba(128,128,128,.25);cursor:pointer;margin-bottom:10px;transition:all .2s">
           <p style="font-size:.73rem;font-weight:700;opacity:.5;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">These A</p>
           <p style="font-size:.9rem;line-height:1.45">${THESE_A}</p>
@@ -240,7 +258,7 @@
       </div>`;
   }
 
-  /* 4 / 6 – Argumente (These / Gegenthese) – beide Sprechblasen auf einer Seite */
+  /* 4 / 6 – Argumente (These / Gegenthese) – beide Sprechblasen nebeneinander */
   function sArgBoth(isThese) {
     const stepN            = isThese ? 4 : 6;
     const theseText        = S.these === 'A' ? THESE_A : THESE_B;
@@ -253,8 +271,61 @@
     const argColor         = isThese ? '#8b5cf6' : '#f59e0b';
     const stepKey          = String(stepN);
     const choices          = S.argChoices[stepKey] || {};
-    const bothDone         = choices[0] && choices[0].opt !== undefined && choices[0].bel !== undefined
-                          && choices[1] && choices[1].opt !== undefined && choices[1].bel !== undefined;
+    const bothDone         = choices[0] && choices[0].opt !== undefined && choices[0].belCorrect === true
+                          && choices[1] && choices[1].opt !== undefined && choices[1].belCorrect === true;
+
+    const renderBubble = (a, ai) => {
+      const c         = choices[ai] || {};
+      const chosenOpt = c.opt;
+      const chosenBel = c.bel;
+      return `
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div id="sp-bubble-${ai}" data-bubble="${ai}"
+          style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;
+                 background:rgba(128,128,128,.07);border-radius:12px;cursor:pointer;
+                 border:2px solid ${chosenOpt !== undefined ? '#6366f1' : 'rgba(128,128,128,.18)'};
+                 transition:border-color .2s">
+          <span style="font-size:1.4rem;line-height:1.2">${a.bubble.icon}</span>
+          <p style="font-size:.9rem;font-style:italic;margin:0;flex:1">&bdquo;${a.bubble.text}&ldquo;</p>
+        </div>
+        <div id="sp-args-${ai}"
+          style="display:${chosenOpt !== undefined ? 'block' : 'none'};padding:10px 12px;
+                 background:rgba(99,102,241,.04);border-radius:8px;border:1px solid ${argColor}33">
+          <p style="font-size:.78rem;font-weight:800;margin-bottom:8px">➜ Argument wählen:</p>
+          ${a.args.map((arg, oi) => {
+            const isChosen = chosenOpt === oi;
+            return `
+            <div data-bub="${ai}" data-opt="${oi}" data-color="${argColor}"
+              style="padding:8px 12px;border-radius:8px;cursor:pointer;margin-bottom:6px;
+                     font-size:.87rem;font-weight:600;color:${argColor};transition:all .2s;
+                     border:2px solid ${isChosen ? argColor : 'rgba(128,128,128,.2)'};
+                     background:${isChosen ? argColor + '11' : ''}">
+              ➜ ${arg}
+            </div>`;
+          }).join('')}
+          <div id="sp-beleg-area-${ai}"
+            style="display:${chosenOpt !== undefined ? 'block' : 'none'};
+                   margin-top:12px;padding-top:10px;border-top:1px solid ${argColor}22">
+            <p style="font-size:.78rem;font-weight:800;margin-bottom:6px">➜ Beleg / Beispiel wählen <span style="font-size:.72rem;font-weight:400;opacity:.6">(wähle eine richtige Antwort)</span>:</p>
+            ${a.belege.map((bel, bi) => {
+              const isBelChosen = chosenBel === bi;
+              const isCorrect   = bel.correct;
+              const chosenColor = isBelChosen ? (isCorrect ? '#16a34a' : '#ef4444') : 'rgba(128,128,128,.2)';
+              return `
+              <div data-belbub="${ai}" data-belopt="${bi}" data-color="${argColor}"
+                data-correct="${bel.correct}" data-explanation="${bel.correct ? '' : (bel.explanation || '')}"
+                style="padding:8px 12px;border-radius:8px;cursor:pointer;margin-bottom:6px;
+                       font-size:.85rem;color:#374151;transition:all .2s;
+                       border:2px solid ${isBelChosen ? chosenColor : 'rgba(128,128,128,.2)'};
+                       background:${isBelChosen ? (isCorrect ? '#16a34a11' : '#ef444411') : ''}">
+                ➜ ${bel.text}
+                ${isBelChosen && !isCorrect ? `<div style="margin-top:6px;font-size:.8rem;font-weight:600;color:#ef4444">${bel.explanation}</div>` : ''}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>`;
+    };
 
     return `
       ${progress(stepN)}
@@ -264,57 +335,11 @@
         <p style="font-size:.75rem;opacity:.5;margin-bottom:4px">${isThese ? 'Deine These' : 'Gegenthese'}</p>
         <p style="font-size:.87rem;font-style:italic;line-height:1.45">${currentTheseText}</p>
       `)}
-
-      <p style="font-size:.82rem;font-weight:700;margin:10px 0 8px;opacity:.7">Klicke eine Sprechblase an:</p>
-      ${currentArgs.map((a, ai) => {
-        const c         = choices[ai] || {};
-        const chosenOpt = c.opt;
-        const chosenBel = c.bel;
-        return `
-        <div style="margin-bottom:16px">
-          <div id="sp-bubble-${ai}" data-bubble="${ai}"
-            style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;
-                   background:rgba(128,128,128,.07);border-radius:12px;cursor:pointer;
-                   border:2px solid ${chosenOpt !== undefined ? '#6366f1' : 'rgba(128,128,128,.18)'};
-                   transition:border-color .2s">
-            <span style="font-size:1.4rem;line-height:1.2">${a.bubble.icon}</span>
-            <p style="font-size:.9rem;font-style:italic;margin:0;flex:1">&bdquo;${a.bubble.text}&ldquo;</p>
-          </div>
-          <div id="sp-args-${ai}"
-            style="display:${chosenOpt !== undefined ? 'block' : 'none'};margin-top:8px;padding:10px 12px;
-                   background:rgba(99,102,241,.04);border-radius:8px;border:1px solid ${argColor}33">
-            <p style="font-size:.78rem;font-weight:800;margin-bottom:8px">➜ Argument ableiten – wähle eine Version:</p>
-            ${a.args.map((arg, oi) => {
-              const isChosen = chosenOpt === oi;
-              return `
-              <div data-bub="${ai}" data-opt="${oi}" data-color="${argColor}"
-                style="padding:8px 12px;border-radius:8px;cursor:pointer;margin-bottom:6px;
-                       font-size:.87rem;font-weight:600;color:${argColor};transition:all .2s;
-                       border:2px solid ${isChosen ? argColor : 'rgba(128,128,128,.2)'};
-                       background:${isChosen ? argColor + '11' : ''}">
-                ➜ ${arg}
-              </div>`;
-            }).join('')}
-            <div id="sp-beleg-area-${ai}"
-              style="display:${chosenOpt !== undefined ? 'block' : 'none'};
-                     margin-top:12px;padding-top:10px;border-top:1px solid ${argColor}22">
-              <p style="font-size:.78rem;font-weight:800;margin-bottom:8px">➜ Beleg / Beispiel wählen:</p>
-              ${a.belege.map((bel, bi) => {
-                const isBelChosen = chosenBel === bi;
-                return `
-                <div data-belbub="${ai}" data-belopt="${bi}" data-color="${argColor}"
-                  style="padding:8px 12px;border-radius:8px;cursor:pointer;margin-bottom:6px;
-                         font-size:.85rem;color:#374151;transition:all .2s;
-                         border:2px solid ${isBelChosen ? argColor : 'rgba(128,128,128,.2)'};
-                         background:${isBelChosen ? argColor + '11' : ''}">
-                  ➜ ${bel}
-                </div>`;
-              }).join('')}
-            </div>
-          </div>
-        </div>`;
-      }).join('')}
-
+      <p style="font-size:.82rem;font-weight:700;margin:10px 0 8px;opacity:.7">Klicke eine Sprechblase an, wähle ein Argument und dann einen Beleg:</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:6px">
+        <div>${renderBubble(currentArgs[0], 0)}</div>
+        <div>${renderBubble(currentArgs[1], 1)}</div>
+      </div>
       ${navigation('Weiter →', !bothDone)}`;
   }
 
@@ -326,9 +351,23 @@
     const eigeneListe  = isThese
       ? (S.these === 'A' ? EIGENE_A : EIGENE_B)
       : (S.these === 'A' ? EIGENE_B : EIGENE_A);
+    const eigenFalsch  = isThese
+      ? (S.these === 'A' ? EIGENE_A_FALSCH : EIGENE_B_FALSCH)
+      : (S.these === 'A' ? EIGENE_B_FALSCH : EIGENE_A_FALSCH);
     const theseLabel   = isThese ? theseText : gegenText;
     const label        = isThese ? 'Hauptteil – These' : 'Hauptteil – Gegenthese';
     const argColor     = isThese ? '#8b5cf6' : '#f59e0b';
+    const stepKey      = 'eigen' + stepN;
+    const sel          = (S.argChoices[stepKey] || {}).sel;
+
+    // Alle 4 Optionen mischen: 3 richtige + 1 falsche (immer an Position 2, also Index 2)
+    const alleOptionen = [
+      { text: eigeneListe[0], correct: true,  idx: 0 },
+      { text: eigeneListe[1], correct: true,  idx: 1 },
+      { text: eigenFalsch.text, correct: false, idx: 2, explanation: eigenFalsch.explanation },
+      { text: eigeneListe[2], correct: true,  idx: 3 },
+    ];
+
     return `
       ${progress(stepN)}
       ${chip(label, argColor)}
@@ -338,13 +377,23 @@
         <p style="font-size:.87rem;font-style:italic;line-height:1.45">${theseLabel}</p>
       `)}
       ${box(`<p style="font-size:.9rem">Formuliere jetzt ein ${r('eigenes Argument')} und stütze es mit einem Beleg aus deinem ${r('Alltag oder eigenen Erfahrungen')}.</p>`)}
-      ${toggleBtn('sp-btn-ideen', 'Ideen anzeigen', '🔍', '#0ea5e9')}
-      ${toggleBox('sp-box-ideen', `
-        <p style="font-weight:600;margin-bottom:8px">💡 Mögliche Argumente:</p>
-        <ul style="padding-left:16px;font-size:.87rem;line-height:2;margin:0">
-          ${eigeneListe.map(e => `<li>${e}</li>`).join('')}
-        </ul>
-      `)}
+      <p style="font-size:.82rem;font-weight:700;margin:10px 0 8px;opacity:.7">Welches ist ein passendes Argument? Klicke an:</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+        ${alleOptionen.map(opt => {
+          const isChosen   = sel === opt.idx;
+          const chosenColor = isChosen ? (opt.correct ? '#16a34a' : '#ef4444') : 'rgba(128,128,128,.2)';
+          const bgColor     = isChosen ? (opt.correct ? '#16a34a11' : '#ef444411') : '';
+          return `
+          <div data-eigen="${stepKey}" data-eigen-idx="${opt.idx}"
+               data-correct="${opt.correct}" data-explanation="${opt.correct ? '' : opt.explanation}"
+               style="padding:10px 14px;border-radius:8px;cursor:pointer;font-size:.87rem;font-weight:600;
+                      transition:all .2s;border:2px solid ${chosenColor};background:${bgColor};
+                      color:${isChosen ? (opt.correct ? '#16a34a' : '#ef4444') : ''}">
+            ➜ ${opt.text}
+            ${isChosen && !opt.correct ? `<div style="margin-top:6px;font-size:.8rem;font-weight:400;color:#ef4444;line-height:1.5">${opt.explanation}</div>` : ''}
+          </div>`;
+        }).join('')}
+      </div>
       ${navigation()}`;
   }
 
@@ -364,9 +413,9 @@
           <li>Kompromiss wäre ${r('sinnvoller')} als vollständiges Verbot</li>
         </ul>
       `)}
-      ${toggleBtn('sp-btn-hilfe', '💡 Hilfe', '💡')}
+      ${toggleBtn('sp-btn-hilfe', '💡 Formulierungshilfen für deinen Text', '💡')}
       ${toggleBox('sp-box-hilfe', `
-        <p style="font-weight:600;margin-bottom:8px">💡 Formulierungshilfen:</p>
+        <p style="font-weight:600;margin-bottom:8px">Formulierungshilfen für deinen Text</p>
         <ul style="padding-left:16px;font-size:.87rem;line-height:2;margin:0">
           <li>${grn('<em>„Meiner Meinung nach …"</em>')}</li>
           <li>${grn('<em>„Ich bin der Ansicht, dass …"</em>')}</li>
@@ -378,11 +427,40 @@
 
   /* 12 – Fazit */
   function s12() {
+    const allProArgs = [
+      ...ARGS_A[0].args.map(a => ({ text: a, side: 'pro' })),
+      ...ARGS_A[1].args.map(a => ({ text: a, side: 'pro' })),
+    ];
+    const allContraArgs = [
+      ...ARGS_B[0].args.map(a => ({ text: a, side: 'contra' })),
+      ...ARGS_B[1].args.map(a => ({ text: a, side: 'contra' })),
+    ];
+    const allArgs = [...allProArgs, ...allContraArgs];
+    const sel = S.fazitSel || [];
+
     return `
       ${progress(12)}
       ${chip('Schluss', '#16a34a')}
       <h3 style="margin:4px 0 14px">Fazit</h3>
-      ${box(`<p style="font-size:.9rem">Das ${r('Fazit')} fasst die wichtigsten Erkenntnisse der Erörterung zusammen. Was haben die Argumente insgesamt gezeigt? Notiere stichwortartig.</p>`)}
+      ${box(`<p style="font-size:.9rem">Hier sollst du nochmal die für dich ${r('stärksten Argumente')} nennen. Wähle 1–2 Argumente aus der Liste:</p>`)}
+      <div style="margin-bottom:12px">
+        ${allArgs.map((a, i) => {
+          const isPro    = a.side === 'pro';
+          const isChosen = sel.includes(i);
+          const sign     = isPro ? '+' : '−';
+          const color    = isPro ? '#16a34a' : '#ef4444';
+          return `
+          <div data-fazit-idx="${i}"
+            style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:8px;
+                   cursor:pointer;margin-bottom:7px;transition:all .2s;font-size:.87rem;
+                   border:2px solid ${isChosen ? color : 'rgba(128,128,128,.2)'};
+                   background:${isChosen ? color + '11' : ''}">
+            <span style="font-size:1rem;font-weight:800;color:${color};min-width:16px">${sign}</span>
+            <span>${a.text}</span>
+          </div>`;
+        }).join('')}
+      </div>
+      <p id="sp-fazit-hint" style="font-size:.8rem;color:#ef4444;display:${sel.length === 0 ? 'block' : 'none'};margin-bottom:8px">Bitte wähle mindestens 1 Argument.</p>
       ${toggleBtn('sp-btn-loesung', '✏️ Musterlösung anzeigen', '✏️', '#8b5cf6')}
       ${toggleBox('sp-box-loesung', `
         <p style="font-size:.78rem;font-weight:700;opacity:.5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Mögliche Stichpunkte:</p>
@@ -392,16 +470,16 @@
           <li>vollständiger Verzicht → ${r('zu einschränkend')}</li>
         </ul>
       `)}
-      ${toggleBtn('sp-btn-hilfe', '💡 Hilfe', '💡')}
+      ${toggleBtn('sp-btn-hilfe', '💡 Formulierungshilfen für deinen Text', '💡')}
       ${toggleBox('sp-box-hilfe', `
-        <p style="font-weight:600;margin-bottom:8px">💡 Fazit-Formulierungen:</p>
+        <p style="font-weight:600;margin-bottom:8px">Formulierungshilfen für deinen Text</p>
         <ul style="padding-left:16px;font-size:.87rem;line-height:2;margin:0">
           <li>${grn('<em>„Zusammenfassend lässt sich sagen, dass …"</em>')}</li>
           <li>${grn('<em>„Die Argumente zeigen deutlich, dass …"</em>')}</li>
           <li>${grn('<em>„Insgesamt überwiegen die Argumente für/gegen …"</em>')}</li>
         </ul>
       `)}
-      ${navigation()}`;
+      ${navigation('Weiter →', sel.length === 0)}`;
   }
 
   /* 13 – Empfehlung */
@@ -437,18 +515,6 @@
     return `
       ${progress(14)}
       <h3 style="margin-bottom:16px">📋 Wichtige Tipps für die Erörterung</h3>
-      ${box(`<p style="font-weight:700;margin-bottom:10px">✅ Aufbau deiner Erörterung</p>
-        <ul style="padding-left:16px;font-size:.87rem;line-height:2;margin:0">
-          <li><strong>Einleitung:</strong> Schreibanlass + Hinführung zum Thema</li>
-          <li><strong>Hauptteil:</strong> These mit Argumenten → Gegenthese mit Argumenten</li>
-          <li><strong>Schluss:</strong> Meinung + Fazit + Empfehlung</li>
-        </ul>`)}
-      ${box(`<p style="font-weight:700;margin-bottom:10px">✅ Argumente &amp; Belege</p>
-        <ul style="padding-left:16px;font-size:.87rem;line-height:2;margin:0">
-          <li>Jedes Argument braucht einen ${r('Beleg oder ein Beispiel')}</li>
-          <li>Sprechblasen als ${r('Inspirationsquelle')} nutzen</li>
-          <li>Starke eigene Argumente ${r('ergänzen')}</li>
-        </ul>`)}
       ${box(`<p style="font-weight:700;margin-bottom:10px">✅ Hinweis zum Schreibplan</p>
         <ul style="padding-left:16px;font-size:.87rem;line-height:2;margin:0">
           <li>Schreibpläne sind in ${r('Stichworten')} – kein Fließtext nötig</li>
@@ -471,7 +537,7 @@
             <li>${grn('✅')} Einleitung: Schreibanlass + Hinführung</li>
             <li>${grn('✅')} These mit Argumenten + Belegen</li>
             <li>${grn('✅')} Gegenthese mit Argumenten + Belegen</li>
-            <li>${grn('✅')} Schluss: Meinung + Fazit + Empfehlung</li>
+            <li>${grn('✅')} Schluss: Fazit + Persönliche Meinung + Empfehlung</li>
           </ul>
         `)}
         <button id="sp-weiter" class="btn btn-ol" style="margin-top:6px">↺ Nochmal von vorne</button>
@@ -491,8 +557,8 @@
       case 5:  return sEigen(true);
       case 6:  return sArgBoth(false);
       case 7:  return sEigen(false);
-      case 8:  return s11();
-      case 9:  return s12();
+      case 8:  return s12();
+      case 9:  return s11();
       case 10: return s13();
       case 11: return s14();
       default: return s15();
@@ -516,7 +582,7 @@
     const wb = document.getElementById('sp-weiter');
     if (wb) wb.addEventListener('click', () => {
       if (S.step >= TOTAL) {
-        S.step = 0; S.these = null; S.votes = {}; S.argChoices = {};
+        S.step = 0; S.these = null; S.votes = {}; S.argChoices = {}; S.fazitSel = [];
       } else {
         S.step++;
       }
@@ -665,32 +731,76 @@
     /* ── Beleg-Option wählen ── */
     document.querySelectorAll('[data-belbub][data-belopt]').forEach(belEl => {
       belEl.addEventListener('click', () => {
-        const bub      = parseInt(belEl.getAttribute('data-belbub'));
-        const belopt   = parseInt(belEl.getAttribute('data-belopt'));
-        const argColor = belEl.getAttribute('data-color') || '#8b5cf6';
-        const stepKey  = String(S.step);
+        const bub         = parseInt(belEl.getAttribute('data-belbub'));
+        const belopt      = parseInt(belEl.getAttribute('data-belopt'));
+        const argColor    = belEl.getAttribute('data-color') || '#8b5cf6';
+        const isCorrect   = belEl.getAttribute('data-correct') === 'true';
+        const explanation = belEl.getAttribute('data-explanation') || '';
+        const stepKey     = String(S.step);
         if (!S.argChoices[stepKey]) S.argChoices[stepKey] = {};
         const prev = S.argChoices[stepKey][bub] || {};
-        S.argChoices[stepKey][bub] = { ...prev, bel: belopt };
+        S.argChoices[stepKey][bub] = { ...prev, bel: belopt, belCorrect: isCorrect };
 
-        // Reset + highlight nur innerhalb dieser Blase
+        // Reset alle Beleg-Optionen dieser Blase
         document.querySelectorAll(`[data-belbub="${bub}"][data-belopt]`).forEach(o => {
           o.style.borderColor = 'rgba(128,128,128,.2)';
           o.style.background  = '';
+          // Erklärungstext entfernen
+          const exDiv = o.querySelector('.bel-explanation');
+          if (exDiv) exDiv.remove();
         });
-        belEl.style.borderColor = argColor;
-        belEl.style.background  = argColor + '11';
+
+        // Gewählte Option einfärben
+        const chosenColor = isCorrect ? '#16a34a' : '#ef4444';
+        belEl.style.borderColor = chosenColor;
+        belEl.style.background  = chosenColor + '11';
+
+        // Bei falscher Antwort: Erklärung einblenden
+        if (!isCorrect && explanation) {
+          const exDiv = document.createElement('div');
+          exDiv.className = 'bel-explanation';
+          exDiv.style.cssText = 'margin-top:6px;font-size:.8rem;font-weight:600;color:#ef4444';
+          exDiv.textContent = explanation;
+          belEl.appendChild(exDiv);
+        }
 
         // Weiter prüfen
         _checkBothDone(stepKey);
+      });
+    });
+
+    /* ── Eigene Argumente: klickbare Optionen ── */
+    document.querySelectorAll('[data-eigen]').forEach(el => {
+      el.addEventListener('click', () => {
+        const stepKey    = el.getAttribute('data-eigen');
+        const idx        = parseInt(el.getAttribute('data-eigen-idx'));
+        if (!S.argChoices[stepKey]) S.argChoices[stepKey] = {};
+        S.argChoices[stepKey].sel = idx;
+        render();
+      });
+    });
+
+    /* ── Fazit: stärkste Argumente wählen ── */
+    document.querySelectorAll('[data-fazit-idx]').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.getAttribute('data-fazit-idx'));
+        if (!S.fazitSel) S.fazitSel = [];
+        const pos = S.fazitSel.indexOf(idx);
+        if (pos !== -1) {
+          S.fazitSel.splice(pos, 1);
+        } else if (S.fazitSel.length < 2) {
+          S.fazitSel.push(idx);
+        }
+        // Re-render nur diesen Schritt
+        render();
       });
     });
   }
 
   function _checkBothDone(stepKey) {
     const c = S.argChoices[stepKey] || {};
-    const done = c[0] && c[0].opt !== undefined && c[0].bel !== undefined
-              && c[1] && c[1].opt !== undefined && c[1].bel !== undefined;
+    const done = c[0] && c[0].opt !== undefined && c[0].belCorrect === true
+              && c[1] && c[1].opt !== undefined && c[1].belCorrect === true;
     const wbBtn = document.getElementById('sp-weiter');
     if (wbBtn) {
       wbBtn.disabled      = !done;
@@ -707,6 +817,7 @@
     S.these      = null;
     S.votes      = {};
     S.argChoices = {};
+    S.fazitSel   = [];
     render();
   }
 
